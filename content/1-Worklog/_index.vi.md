@@ -7,12 +7,11 @@ pre: " <b> 1. </b> "
 ---
 
 
-**Trong trang này** bạn sẽ cần giới thiệu worklog của bạn **như thế nào**? Bạn hoàn thành chương trình trong vòng **bao nhiêu tuần**? Bạn **đã làm gì** trong các tuần đó?
+Đây là nhật ký công việc của tôi trong suốt **12 tuần** tham gia chương trình **First Cloud AI Journey** — một chương trình thực tập về Cloud và AI trên nền tảng AWS. Mỗi tuần tôi sẽ ghi lại những gì đã học được, các dịch vụ đã thực hành, và những bài học rút ra trong hành trình khám phá AWS.
 
+Chương trình kéo dài khoảng **3 tháng**, bao gồm các nội dung từ cơ bản đến nâng cao về điện toán đám mây, AI/ML, bảo mật và kiến trúc hệ thống trên AWS.
 
-Thông thường và cũng là tiêu chuẩn, một worklog được thực hiện trong khoảng 3 tháng (trong suốt thời gian thực tập) với nội dung các tuần như sau:
-
-**Tuần 1:** [Làm quen với AWS và các dịch vụ cơ bản trong AWS](1.1-week1/)
+**Tuần 1:** [Làm quen với AWS và các dịch vụ cơ bản (EC2, Bedrock, Lambda, RDS, Budgets) — Thiết lập tài khoản và hệ thống giám sát chi phí](1.1-week1/)
 
 **Tuần 2:** [Làm công việc A...](1.2-week2/)
 

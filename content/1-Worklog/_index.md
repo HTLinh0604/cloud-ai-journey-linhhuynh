@@ -7,11 +7,11 @@ pre: " <b> 1. </b> "
 ---
 
 
-**On this page**, you will need to introduce your worklog. **How** did you complete it? How many weeks did you take to complete the program? **What** did you do in those weeks?
+This is my worklog throughout **12 weeks** of participating in the **First Cloud AI Journey** program — an internship program focused on Cloud and AI on the AWS platform. Each week, I document what I have learned, the services I have practiced, and the key takeaways from my AWS exploration journey.
 
-Typically, and as a standard, a worklog is carried out over about 3 months (throughout the internship period) with weekly contents as follows:
+The program spans approximately **3 months**, covering topics from foundational to advanced levels in cloud computing, AI/ML, security, and system architecture on AWS.
 
-**Week 1:** [Getting familiar with AWS and basic AWS services](1.1-week1/)
+**Week 1:** [Getting familiar with AWS and basic services (EC2, Bedrock, Lambda, RDS, Budgets) — Account setup and cost monitoring](1.1-week1/)
 
 **Week 2:** [Doing task A...](1.2-week2/)
 
