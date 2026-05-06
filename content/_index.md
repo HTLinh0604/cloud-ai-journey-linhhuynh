@@ -6,7 +6,7 @@ chapter: false
 ---
     
 # Internship Report
-### Student Information 1:
+### Student 1 Information:
 &emsp; **Full Name:** Huynh Thai Linh
 
 &emsp; **Phone Number:** 0941 595 061 
@@ -29,7 +29,7 @@ chapter: false
 
 ---
 
-### Student Information 2:
+### Student 2 Information:
 &emsp; **Full Name:** Nguyen Ngoc Quynh Anh
 
 &emsp; **Phone Number:** 0376 654 308
