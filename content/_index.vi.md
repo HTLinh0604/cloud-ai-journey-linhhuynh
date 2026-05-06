@@ -25,15 +25,14 @@ chapter: false
 
 &emsp; **Thời gian thực tập:** Từ ngày 20/04/2026 đến ngày 15/07/2026
 
-![Ảnh đại diện của bạn](/images/avatar.jpg?width=500px)
+![Ảnh đại diện của bạn](/images/myself.jpg?width=400px)
 
 
 ### Nội dung báo cáo
 
 1.  [Worklog](1-Worklog/)
 2.  [Proposal](2-Proposal/)
-3.  [Các bài blogs đã dịch](3-BlogsTranslated/)
-4.  [Các events đã tham gia](4-EventParticipated/)
-5.  [Workshop](5-Workshop/)
-6.  [Tự đánh giá](6-Self-evaluation/)
-7.  [Chia sẻ, đóng góp ý kiến](7-Feedback/)
+3.  [Các events đã tham gia](4-EventParticipated/)
+4.  [Workshop](5-Workshop/)
+5.  [Tự đánh giá](6-Self-evaluation/)
+6.  [Chia sẻ, đóng góp ý kiến](7-Feedback/)
