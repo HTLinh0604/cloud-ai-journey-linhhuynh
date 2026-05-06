@@ -6,10 +6,10 @@ chapter: false
 ---
     
 # Internship Report
-### Student Information:
+### Student Information 1:
 &emsp; **Full Name:** Huynh Thai Linh
 
-&emsp; **Phone Number:** 0941595061 
+&emsp; **Phone Number:** 0941 595 061 
 
 &emsp; **Email:** huynhthailinh0604@gmail.com
 
@@ -25,7 +25,30 @@ chapter: false
 
 &emsp; **Internship Duration:** From 20/04/2026 to 15/07/2026
 
-![Your profile picture](/images/myself.jpg?width=400px)
+![Your profile picture](/images/myself.jpg?width=300px)
+
+---
+
+### Student Information 2:
+&emsp; **Full Name:** Nguyen Ngoc Quynh Anh
+
+&emsp; **Phone Number:** 0376 654 308
+
+&emsp; **Email:** quynhanhnguyenngon081@gmail.com
+
+&emsp; **University:** Ho Chi Minh City University of Technology
+
+&emsp; **Major:** Data Science
+
+&emsp; **Class:** AWS042026
+
+&emsp; **Internship Company:** Amazon Web Services Vietnam Co., Ltd.
+
+&emsp; **Internship Position:** FCJ Data Engineer Intern
+
+&emsp; **Internship Duration:** From 20/04/2026 to 15/07/2026
+
+![Student 2 profile picture](/images/avatar2.jpg?width=300px)
 
 ### Report Content
 
