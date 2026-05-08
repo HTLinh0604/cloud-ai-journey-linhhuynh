@@ -30,7 +30,7 @@ chapter: false
 ---
 
 ### Thông tin sinh viên 2:
-&emsp; **Họ và tên:** Nguyễn Ngọc Quỳn Anh
+&emsp; **Họ và tên:** Nguyễn Ngọc Quỳnh Anh
 
 &emsp; **Số điện thoại:** 0376654308
 
