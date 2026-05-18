@@ -13,7 +13,7 @@ Chương trình kéo dài khoảng **3 tháng**, bao gồm các nội dung từ 
 
 **Tuần 1:** [Làm quen với AWS và các dịch vụ cơ bản (EC2, Bedrock, Lambda, RDS, Budgets) — Thiết lập tài khoản và hệ thống giám sát chi phí](1.1-week1/)
 
-**Tuần 2:** [Làm công việc A...](1.2-week2/)
+**Tuần 2:** [Khám phá các dịch vụ AWS — CLI, DynamoDB, Lambda, CDK, CloudFormation, Glue, Athena, VPC, S3 & RDS](1.2-week2/)
 
 **Tuần 3:** [Làm công việc B...](1.3-week3/)
 

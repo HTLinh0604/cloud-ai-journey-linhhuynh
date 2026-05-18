@@ -13,7 +13,7 @@ The program spans approximately **3 months**, covering topics from foundational 
 
 **Week 1:** [Getting familiar with AWS and basic services (EC2, Bedrock, Lambda, RDS, Budgets) — Account setup and cost monitoring](1.1-week1/)
 
-**Week 2:** [Doing task A...](1.2-week2/)
+**Week 2:** [Deepening Into AWS Services — CLI, DynamoDB, Lambda, CDK, CloudFormation, Glue, Athena, VPC, S3 & RDS](1.2-week2/)
 
 **Week 3:** [Doing task B...](1.3-week3/)
 
