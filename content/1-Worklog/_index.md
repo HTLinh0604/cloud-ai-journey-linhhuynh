@@ -11,7 +11,7 @@ This is my worklog throughout **12 weeks** of participating in the **First Cloud
 
 The program spans approximately **3 months**, covering topics from foundational to advanced levels in cloud computing, AI/ML, security, and system architecture on AWS.
 
-**Week 1:** [Getting familiar with AWS and basic services (EC2, Bedrock, Lambda, RDS, Budgets) — Account setup and cost monitoring](1.1-week1/)
+**Week 1:** [Getting familiar with AWS and basic services, Account setup and cost monitoring](1.1-week1/)
 
 **Week 2:** [Deepening Into AWS Services — CLI, DynamoDB, Lambda, CDK, CloudFormation, Glue, Athena, VPC, S3 & RDS](1.2-week2/)
 
