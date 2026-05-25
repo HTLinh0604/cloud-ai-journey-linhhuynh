@@ -23,11 +23,12 @@ Trong quá trình thực tập, em đã tham gia .... events, với mỗi event 
 
 
 ### [Event 2](4.2-Event2/)
-&emsp;**Tên sự kiện:** GenAI-powered App-DB Modernization workshop
+&emsp;**Tên sự kiện:** AWS FIRST CLOUD AI JOURNEY COMMUNITY DAY
 
-&emsp;**Thời gian:** 09:00 ngày 13/08/2025
+&emsp;**Thời gian:** 09:00 ngày 23/05/2026
 
 &emsp;**Địa điểm:** Tầng 26, tòa nhà Bitexco, số 02 đường Hải Triều, phường Sài Gòn, thành phố Hồ Chí Minh
 
-&emsp;**Vai trò trong sự kiện:** Người tham dự 
+&emsp;**Vai trò trong sự kiện:** Người tham dự
+
 
