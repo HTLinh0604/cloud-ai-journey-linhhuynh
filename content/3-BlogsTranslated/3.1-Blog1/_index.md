@@ -1,127 +1,81 @@
 ---
 title: "Blog 1"
-date: 2024-01-01
+date: 2026-01-01
 weight: 1
 chapter: false
 pre: " <b> 3.1. </b> "
-draft: true  # COMMENTED OUT - tạm ẩn section này
 ---
-{{% notice warning %}}
-⚠️ **Note:** The information below is for reference purposes only. Please **do not copy verbatim** for your report, including this warning.
-{{% /notice %}}
 
-# Getting Started with Healthcare Data Lakes: Using Microservices
+# Building a Real-time CDC Pipeline: From Amazon Aurora to Amazon S3 Tables with Debezium and Firehose
 
-Data lakes can help hospitals and healthcare facilities turn data into business insights, maintain business continuity, and protect patient privacy. A **data lake** is a centralized, managed, and secure repository to store all your data, both in its raw and processed forms for analysis. Data lakes allow you to break down data silos and combine different types of analytics to gain insights and make better business decisions.
-
-This blog post is part of a larger series on getting started with setting up a healthcare data lake. In my final post of the series, *“Getting Started with Healthcare Data Lakes: Diving into Amazon Cognito”*, I focused on the specifics of using Amazon Cognito and Attribute Based Access Control (ABAC) to authenticate and authorize users in the healthcare data lake solution. In this blog, I detail how the solution evolved at a foundational level, including the design decisions I made and the additional features used. You can access the code samples for the solution in this Git repo for reference.
+> **Original article:** [Real-time CDC from Aurora PostgreSQL to Amazon S3 Tables using Debezium and Firehose](https://aws.amazon.com/blogs/big-data/real-time-cdc-from-aurora-postgresql-to-amazon-s3-tables-using-debezium-and-firehose/)
 
 ---
 
-## Architecture Guidance
+In today's data era, separating transactional (OLTP) and analytical (OLAP) data is critically important. Running heavy analytical queries directly on an Amazon Aurora cluster will almost certainly degrade transactional system performance.
 
-The main change since the last presentation of the overall architecture is the decomposition of a single service into a set of smaller services to improve maintainability and flexibility. Integrating a large volume of diverse healthcare data often requires specialized connectors for each format; by keeping them encapsulated separately as microservices, we can add, remove, and modify each connector without affecting the others. The microservices are loosely coupled via publish/subscribe messaging centered in what I call the “pub/sub hub.”
-
-This solution represents what I would consider another reasonable sprint iteration from my last post. The scope is still limited to the ingestion and basic parsing of **HL7v2 messages** formatted in **Encoding Rules 7 (ER7)** through a REST interface.
-
-**The solution architecture is now as follows:**
-
-> *Figure 1. Overall architecture; colored boxes represent distinct services.*
+Traditionally, batch export is the go-to approach — but it introduces significant latency. This article introduces a more powerful solution: **Real-time Change Data Capture (CDC)** to move data from Aurora PostgreSQL to **Amazon S3 Tables** in Apache Iceberg format, keeping data always ready for immediate query.
 
 ---
 
-While the term *microservices* has some inherent ambiguity, certain traits are common:  
-- Small, autonomous, loosely coupled  
-- Reusable, communicating through well-defined interfaces  
-- Specialized to do one thing well  
-- Often implemented in an **event-driven architecture**
+## 1. Why Amazon S3 Tables and Apache Iceberg?
 
-When determining where to draw boundaries between microservices, consider:  
-- **Intrinsic**: technology used, performance, reliability, scalability  
-- **Extrinsic**: dependent functionality, rate of change, reusability  
-- **Human**: team ownership, managing *cognitive load*
+Unlike traditional CDC methods that only log changes in append-only fashion, the **Apache Iceberg** format supports row-level **update** and **delete** operations.
+
+**Amazon S3 Tables** also automates complex maintenance tasks like snapshot management and data compaction, freeing up data engineers from operational toil. You can also leverage Iceberg's **Time Travel** feature to query data at a specific point in the past.
 
 ---
 
-## Technology Choices and Communication Scope
+## 2. System Architecture: 6 Core Components
 
-| Communication scope                       | Technologies / patterns to consider                                                        |
-| ----------------------------------------- | ------------------------------------------------------------------------------------------ |
-| Within a single microservice              | Amazon Simple Queue Service (Amazon SQS), AWS Step Functions                               |
-| Between microservices in a single service | AWS CloudFormation cross-stack references, Amazon Simple Notification Service (Amazon SNS) |
-| Between services                          | Amazon EventBridge, AWS Cloud Map, Amazon API Gateway                                      |
+The system is optimized with 6 data transmission steps:
 
----
-
-## The Pub/Sub Hub
-
-Using a **hub-and-spoke** architecture (or message broker) works well with a small number of tightly related microservices.  
-- Each microservice depends only on the *hub*  
-- Inter-microservice connections are limited to the contents of the published message  
-- Reduces the number of synchronous calls since pub/sub is a one-way asynchronous *push*
-
-Drawback: **coordination and monitoring** are needed to avoid microservices processing the wrong message.
+| Step | From → To | Description |
+|------|-----------|-------------|
+| 1 | Aurora PostgreSQL → Debezium | Debezium on MSK Connect reads changes from PostgreSQL WAL with minimal performance impact |
+| 2 | Debezium → Amazon MSK | `ByLogicalTableRouter` merges changes from multiple tables into one Kafka topic — reducing cost and operational complexity |
+| 3 | Amazon MSK → Firehose | Amazon Data Firehose continuously polls data from MSK via AWS PrivateLink |
+| 4 | AWS Lambda | The "transformation brain" — decodes data, flattens Debezium's complex structure, and attaches metadata (table name + operation type) |
+| 5 | Firehose → S3 Tables | Firehose uses Lambda metadata to push data into the correct Iceberg table in S3 |
+| 6 | Query & Governance | Data is ready for query via Amazon Athena or Redshift, governed by AWS Lake Formation |
 
 ---
 
-## Core Microservice
+## 3. The Intelligent Data Transformation Mechanism
 
-Provides foundational data and communication layer, including:  
-- **Amazon S3** bucket for data  
-- **Amazon DynamoDB** for data catalog  
-- **AWS Lambda** to write messages into the data lake and catalog  
-- **Amazon SNS** topic as the *hub*  
-- **Amazon S3** bucket for artifacts such as Lambda code
+The most interesting aspect of this solution is how Lambda maps Debezium operation codes to Firehose:
 
-> Only allow indirect write access to the data lake through a Lambda function → ensures consistency.
+| Debezium Code | Meaning | Firehose Operation |
+|---|---|---|
+| `c` (Create) / `r` (Read) | Insert | → **Insert** into Iceberg table |
+| `u` (Update) | Update | → **Upsert** based on primary key |
+| `d` (Delete) | Delete | → **Delete** the corresponding row |
 
----
-
-## Front Door Microservice
-
-- Provides an API Gateway for external REST interaction  
-- Authentication & authorization based on **OIDC** via **Amazon Cognito**  
-- Self-managed *deduplication* mechanism using DynamoDB instead of SNS FIFO because:  
-  1. SNS deduplication TTL is only 5 minutes  
-  2. SNS FIFO requires SQS FIFO  
-  3. Ability to proactively notify the sender that the message is a duplicate  
+Thanks to this mechanism, the destination table in S3 Tables is always a **perfect replica** of the current state of the source database.
 
 ---
 
-## Staging ER7 Microservice
+## 4. Rapid Deployment with AWS CDK
 
-- Lambda “trigger” subscribed to the pub/sub hub, filtering messages by attribute  
-- Step Functions Express Workflow to convert ER7 → JSON  
-- Two Lambdas:  
-  1. Fix ER7 formatting (newline, carriage return)  
-  2. Parsing logic  
-- Result or error is pushed back into the pub/sub hub  
+Instead of manually configuring each service, you can deploy the entire infrastructure as code using **AWS CDK**. The process includes:
+
+1. Enable `logical_replication` on Aurora.
+2. Package and register the Debezium plugin on MSK Connect.
+3. Use `cdk deploy` to instantiate all **6 resource stacks** — from the MSK cluster to the S3 Tables bucket.
+
+This solution helps you build a near-real-time **Data Lakehouse** that is highly cost-optimized by merging multiple tables into a single data stream. If you're looking for a modern way to synchronize transactional data for analytics, this is the answer.
 
 ---
 
-## New Features in the Solution
+## Key Takeaways
 
-### 1. AWS CloudFormation Cross-Stack References
-Example *outputs* in the core microservice:
-```yaml
-Outputs:
-  Bucket:
-    Value: !Ref Bucket
-    Export:
-      Name: !Sub ${AWS::StackName}-Bucket
-  ArtifactBucket:
-    Value: !Ref ArtifactBucket
-    Export:
-      Name: !Sub ${AWS::StackName}-ArtifactBucket
-  Topic:
-    Value: !Ref Topic
-    Export:
-      Name: !Sub ${AWS::StackName}-Topic
-  Catalog:
-    Value: !Ref Catalog
-    Export:
-      Name: !Sub ${AWS::StackName}-Catalog
-  CatalogArn:
-    Value: !GetAtt Catalog.Arn
-    Export:
-      Name: !Sub ${AWS::StackName}-CatalogArn
+- **CDC + Iceberg = Real-time analytics without query pressure on Aurora**
+- Merging multiple tables into one Kafka topic significantly reduces cost
+- Lambda is the bridge between Debezium's format and Firehose's expectations
+- AWS CDK makes this entire infrastructure reproducible and version-controlled
+
+---
+
+*Blog image:*
+
+![Blog 1 - Real-time CDC Pipeline](/images/blog1.jpg)

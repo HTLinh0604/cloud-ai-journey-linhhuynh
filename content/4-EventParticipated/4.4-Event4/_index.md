@@ -3,7 +3,7 @@ title: "Event 4"
 date: 2026-06-27
 weight: 4
 chapter: false
-pre: " <b> 3.4. </b> "
+pre: " <b> 4.4. </b> "
 ---
 
 # Event Report: FCAJ COMMUNITY DAY — "DATA DRIVEN, AI RISEN"

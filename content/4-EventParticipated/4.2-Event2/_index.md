@@ -3,7 +3,7 @@ title: "Event 2"
 date: 2026-05-23
 weight: 2
 chapter: false
-pre: " <b> 3.2. </b> "
+pre: " <b> 4.2. </b> "
 ---
 
 # Event Report: AWS FIRST CLOUD AI JOURNEY COMMUNITY DAY

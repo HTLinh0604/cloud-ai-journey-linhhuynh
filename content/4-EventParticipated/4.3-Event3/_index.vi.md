@@ -3,7 +3,7 @@ title: "Event 3"
 date: 2026-05-30
 weight: 3
 chapter: false
-pre: " <b> 3.3. </b> "
+pre: " <b> 4.3. </b> "
 ---
 
 # Bài Thu Hoạch: AWS FIRST CLOUD AI JOURNEY MEET UP

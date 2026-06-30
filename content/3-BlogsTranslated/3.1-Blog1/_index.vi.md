@@ -1,127 +1,81 @@
 ---
 title: "Blog 1"
-date: 2024-01-01
+date: 2026-01-01
 weight: 1
 chapter: false
 pre: " <b> 3.1. </b> "
-draft: true  # COMMENTED OUT - tạm ẩn section này
 ---
-{{% notice warning %}}
-⚠️ **Lưu ý:** Các thông tin dưới đây chỉ nhằm mục đích tham khảo, vui lòng **không sao chép nguyên văn** cho bài báo cáo của bạn kể cả warning này.
-{{% /notice %}}
 
-# Bắt đầu với healthcare data lakes: Sử dụng microservices
+# Xây dựng Pipeline CDC Thời Gian Thực: Từ Amazon Aurora sang Amazon S3 Tables với Debezium và Firehose
 
-Các data lake có thể giúp các bệnh viện và cơ sở y tế chuyển dữ liệu thành những thông tin chi tiết về doanh nghiệp và duy trì hoạt động kinh doanh liên tục, đồng thời bảo vệ quyền riêng tư của bệnh nhân. **Data lake** là một kho lưu trữ tập trung, được quản lý và bảo mật để lưu trữ tất cả dữ liệu của bạn, cả ở dạng ban đầu và đã xử lý để phân tích. data lake cho phép bạn chia nhỏ các kho chứa dữ liệu và kết hợp các loại phân tích khác nhau để có được thông tin chi tiết và đưa ra các quyết định kinh doanh tốt hơn.
-
-Bài đăng trên blog này là một phần của loạt bài lớn hơn về việc bắt đầu cài đặt data lake dành cho lĩnh vực y tế. Trong bài đăng blog cuối cùng của tôi trong loạt bài, *“Bắt đầu với data lake dành cho lĩnh vực y tế: Đào sâu vào Amazon Cognito”*, tôi tập trung vào các chi tiết cụ thể của việc sử dụng Amazon Cognito và Attribute Based Access Control (ABAC) để xác thực và ủy quyền người dùng trong giải pháp data lake y tế. Trong blog này, tôi trình bày chi tiết cách giải pháp đã phát triển ở cấp độ cơ bản, bao gồm các quyết định thiết kế mà tôi đã đưa ra và các tính năng bổ sung được sử dụng. Bạn có thể truy cập các code samples cho giải pháp tại Git repo này để tham khảo.
+> **Bài gốc:** [Real-time CDC from Aurora PostgreSQL to Amazon S3 Tables using Debezium and Firehose](https://aws.amazon.com/blogs/big-data/real-time-cdc-from-aurora-postgresql-to-amazon-s3-tables-using-debezium-and-firehose/)
 
 ---
 
-## Hướng dẫn kiến trúc
+Trong kỷ nguyên dữ liệu hiện nay, việc tách biệt dữ liệu giao dịch (OLTP) và dữ liệu phân tích (OLAP) là cực kỳ quan trọng. Nếu bạn chạy các truy vấn phân tích nặng nề trực tiếp trên cụm Amazon Aurora, hiệu năng hệ thống giao dịch chắc chắn sẽ bị ảnh hưởng.
 
-Thay đổi chính kể từ lần trình bày cuối cùng của kiến trúc tổng thể là việc tách dịch vụ đơn lẻ thành một tập hợp các dịch vụ nhỏ để cải thiện khả năng bảo trì và tính linh hoạt. Việc tích hợp một lượng lớn dữ liệu y tế khác nhau thường yêu cầu các trình kết nối chuyên biệt cho từng định dạng; bằng cách giữ chúng được đóng gói riêng biệt với microservices, chúng ta có thể thêm, xóa và sửa đổi từng trình kết nối mà không ảnh hưởng đến những kết nối khác. Các microservices được kết nối rời thông qua tin nhắn publish/subscribe tập trung trong cái mà tôi gọi là “pub/sub hub”.
-
-Giải pháp này đại diện cho những gì tôi sẽ coi là một lần lặp nước rút hợp lý khác từ last post của tôi. Phạm vi vẫn được giới hạn trong việc nhập và phân tích cú pháp đơn giản của các **HL7v2 messages** được định dạng theo **Quy tắc mã hóa 7 (ER7)** thông qua giao diện REST.
-
-**Kiến trúc giải pháp bây giờ như sau:**
-
-> *Hình 1. Kiến trúc tổng thể; những ô màu thể hiện những dịch vụ riêng biệt.*
+Thông thường, chúng ta dùng phương pháp xuất dữ liệu theo lô (batch), nhưng cách này lại tạo ra độ trễ lớn. Bài viết này sẽ giới thiệu cho bạn một giải pháp mạnh mẽ hơn: **Real-time Change Data Capture (CDC)** để đưa dữ liệu từ Aurora PostgreSQL sang **Amazon S3 Tables** dưới định dạng Apache Iceberg, giúp dữ liệu luôn sẵn sàng để truy vấn ngay lập tức.
 
 ---
 
-Mặc dù thuật ngữ *microservices* có một số sự mơ hồ cố hữu, một số đặc điểm là chung:  
-- Chúng nhỏ, tự chủ, kết hợp rời rạc  
-- Có thể tái sử dụng, giao tiếp thông qua giao diện được xác định rõ  
-- Chuyên biệt để giải quyết một việc  
-- Thường được triển khai trong **event-driven architecture**
+## 1. Tại sao lại là Amazon S3 Tables và Apache Iceberg?
 
-Khi xác định vị trí tạo ranh giới giữa các microservices, cần cân nhắc:  
-- **Nội tại**: công nghệ được sử dụng, hiệu suất, độ tin cậy, khả năng mở rộng  
-- **Bên ngoài**: chức năng phụ thuộc, tần suất thay đổi, khả năng tái sử dụng  
-- **Con người**: quyền sở hữu nhóm, quản lý *cognitive load*
+Khác với các phương pháp CDC truyền thống chỉ ghi lại nhật ký thay đổi (append-only), định dạng **Apache Iceberg** cho phép thực hiện các thao tác **cập nhật (update)** và **xóa (delete)** ở cấp độ dòng dữ liệu.
+
+Đặc biệt, **Amazon S3 Tables** còn tự động hóa các công việc bảo trì phức tạp như quản lý snapshot hay nén dữ liệu (compaction), giúp các kỹ sư dữ liệu rảnh tay hơn. Bạn còn có thể sử dụng tính năng **Time Travel** của Iceberg để truy vấn dữ liệu tại một thời điểm trong quá khứ.
 
 ---
 
-## Lựa chọn công nghệ và phạm vi giao tiếp
+## 2. Kiến trúc của hệ thống: 6 thành phần cốt lõi
 
-| Phạm vi giao tiếp                        | Các công nghệ / mô hình cần xem xét                                                        |
-| ---------------------------------------- | ------------------------------------------------------------------------------------------ |
-| Trong một microservice                   | Amazon Simple Queue Service (Amazon SQS), AWS Step Functions                               |
-| Giữa các microservices trong một dịch vụ | AWS CloudFormation cross-stack references, Amazon Simple Notification Service (Amazon SNS) |
-| Giữa các dịch vụ                         | Amazon EventBridge, AWS Cloud Map, Amazon API Gateway                                      |
+Hệ thống được thiết kế tối ưu với 6 bước truyền dẫn dữ liệu:
 
----
-
-## The pub/sub hub
-
-Việc sử dụng kiến trúc **hub-and-spoke** (hay message broker) hoạt động tốt với một số lượng nhỏ các microservices liên quan chặt chẽ.  
-- Mỗi microservice chỉ phụ thuộc vào *hub*  
-- Kết nối giữa các microservice chỉ giới hạn ở nội dung của message được xuất  
-- Giảm số lượng synchronous calls vì pub/sub là *push* không đồng bộ một chiều
-
-Nhược điểm: cần **phối hợp và giám sát** để tránh microservice xử lý nhầm message.
+| Bước | Từ → Đến | Mô tả |
+|------|----------|-------|
+| 1 | Aurora PostgreSQL → Debezium | Debezium chạy trên MSK Connect đọc thay đổi từ WAL của PostgreSQL, hầu như không gây áp lực hiệu năng |
+| 2 | Debezium → Amazon MSK | `ByLogicalTableRouter` gộp thay đổi từ nhiều bảng vào một Kafka topic — tiết kiệm chi phí và giảm độ phức tạp |
+| 3 | Amazon MSK → Firehose | Amazon Data Firehose liên tục thăm dò dữ liệu từ MSK qua AWS PrivateLink |
+| 4 | AWS Lambda | "Bộ não" chuyển đổi — giải mã dữ liệu, làm phẳng cấu trúc Debezium, gắn metadata (tên bảng + loại thao tác) |
+| 5 | Firehose → S3 Tables | Firehose dựa vào metadata từ Lambda để đẩy vào đúng bảng Iceberg tương ứng |
+| 6 | Truy vấn & Phân quyền | Dữ liệu sẵn sàng truy vấn qua Amazon Athena hoặc Redshift, kiểm soát bởi AWS Lake Formation |
 
 ---
 
-## Core microservice
+## 3. Cơ chế chuyển đổi dữ liệu thông minh
 
-Cung cấp dữ liệu nền tảng và lớp truyền thông, gồm:  
-- **Amazon S3** bucket cho dữ liệu  
-- **Amazon DynamoDB** cho danh mục dữ liệu  
-- **AWS Lambda** để ghi message vào data lake và danh mục  
-- **Amazon SNS** topic làm *hub*  
-- **Amazon S3** bucket cho artifacts như mã Lambda
+Điểm thú vị nhất của giải pháp nằm ở cách Lambda ánh xạ mã thao tác từ Debezium sang Firehose:
 
-> Chỉ cho phép truy cập ghi gián tiếp vào data lake qua hàm Lambda → đảm bảo nhất quán.
+| Mã Debezium | Ý nghĩa | Thao tác Firehose |
+|---|---|---|
+| `c` (Create) / `r` (Read) | Tạo mới | → **Insert** vào bảng Iceberg |
+| `u` (Update) | Cập nhật | → **Upsert** dựa trên khóa chính |
+| `d` (Delete) | Xóa | → **Delete** dòng tương ứng |
 
----
-
-## Front door microservice
-
-- Cung cấp API Gateway để tương tác REST bên ngoài  
-- Xác thực & ủy quyền dựa trên **OIDC** thông qua **Amazon Cognito**  
-- Cơ chế *deduplication* tự quản lý bằng DynamoDB thay vì SNS FIFO vì:
-  1. SNS deduplication TTL chỉ 5 phút
-  2. SNS FIFO yêu cầu SQS FIFO
-  3. Chủ động báo cho sender biết message là bản sao
+Nhờ cơ chế này, bảng đích tại S3 Tables luôn là một **bản sao hoàn hảo** về trạng thái hiện tại của cơ sở dữ liệu nguồn.
 
 ---
 
-## Staging ER7 microservice
+## 4. Triển khai nhanh chóng với AWS CDK
 
-- Lambda “trigger” đăng ký với pub/sub hub, lọc message theo attribute  
-- Step Functions Express Workflow để chuyển ER7 → JSON  
-- Hai Lambda:
-  1. Sửa format ER7 (newline, carriage return)
-  2. Parsing logic  
-- Kết quả hoặc lỗi được đẩy lại vào pub/sub hub
+Thay vì phải cấu hình thủ công từng dịch vụ, bạn có thể triển khai toàn bộ hạ tầng này thông qua mã nguồn với **AWS CDK**. Quy trình bao gồm:
+
+1. Bật tính năng `logical_replication` trên Aurora.
+2. Đóng gói và đăng ký Debezium plugin trên MSK Connect.
+3. Sử dụng lệnh `cdk deploy` để khởi tạo toàn bộ **6 stack tài nguyên** từ MSK cluster cho đến S3 Tables bucket.
+
+Giải pháp này không chỉ giúp bạn xây dựng một **Data Lakehouse** gần như thời gian thực mà còn cực kỳ tối ưu về chi phí nhờ việc gộp nhiều bảng vào một luồng dữ liệu duy nhất.
 
 ---
 
-## Tính năng mới trong giải pháp
+## Bài học rút ra
 
-### 1. AWS CloudFormation cross-stack references
-Ví dụ *outputs* trong core microservice:
-```yaml
-Outputs:
-  Bucket:
-    Value: !Ref Bucket
-    Export:
-      Name: !Sub ${AWS::StackName}-Bucket
-  ArtifactBucket:
-    Value: !Ref ArtifactBucket
-    Export:
-      Name: !Sub ${AWS::StackName}-ArtifactBucket
-  Topic:
-    Value: !Ref Topic
-    Export:
-      Name: !Sub ${AWS::StackName}-Topic
-  Catalog:
-    Value: !Ref Catalog
-    Export:
-      Name: !Sub ${AWS::StackName}-Catalog
-  CatalogArn:
-    Value: !GetAtt Catalog.Arn
-    Export:
-      Name: !Sub ${AWS::StackName}-CatalogArn
+- **CDC + Iceberg = Phân tích thời gian thực mà không gây áp lực lên Aurora**
+- Gộp nhiều bảng vào một Kafka topic giúp tiết kiệm chi phí đáng kể
+- Lambda là cầu nối giữa định dạng Debezium và yêu cầu của Firehose
+- AWS CDK giúp toàn bộ hạ tầng có thể tái tạo và quản lý phiên bản
+
+---
+
+*Hình ảnh minh họa:*
+
+![Blog 1 - Pipeline CDC Thời Gian Thực](/images/blog1.jpg)
