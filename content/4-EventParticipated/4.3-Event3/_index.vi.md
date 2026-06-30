@@ -216,4 +216,8 @@ Nghe các diễn giả khác chia sẻ — từ DevOps ẩn dưới bề mặt d
 
 ### Hình Ảnh Sự Kiện
 
-![AWS First Cloud AI Journey Meet Up](/images/event3.jpg)
+<div style="display:flex; gap:12px; margin-top:12px;">
+  <img src="/images/speaker1.JPG" style="flex:1; width:33%; border-radius:8px; object-fit:cover;" alt="Speaker 1">
+  <img src="/images/speaker2.JPG" style="flex:1; width:33%; border-radius:8px; object-fit:cover;" alt="Speaker 2">
+  <img src="/images/event3.JPG" style="flex:1; width:33%; border-radius:8px; object-fit:cover;" alt="Event 3">
+</div>
