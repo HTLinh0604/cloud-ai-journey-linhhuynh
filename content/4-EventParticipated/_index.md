@@ -37,6 +37,7 @@ During my internship, I participated in four events. Each one was a memorable ex
 
 &emsp;**Location:** 26th Floor, Bitexco Tower, 02 Hai Trieu Street, Saigon Ward, Ho Chi Minh City  
 
+&emsp;**Role:** Speaker  
 
 ---
 
