@@ -10,11 +10,13 @@ pre: " <b> 3.2. </b> "
 
 > **Bài gốc:** [Access Amazon S3 Data Files Directly Using AWS Lake Formation Permissions](https://aws.amazon.com/blogs/big-data/access-amazon-s3-data-files-directly-using-aws-lake-formation-permissions/)
 
+> **Bài dịch:** [Access Amazon S3 Data Files Directly Using AWS Lake Formation Permissions](https://www.facebook.com/groups/awsstudygroupfcj/permalink/2189246758506951/?rdid=ns4Quvh0bISXoSAa#)
+
 ---
 
 Nếu bạn là một Data Scientist hay ML Engineer, chắc hẳn bạn đã từng gặp tình huống oái oăm này: Bạn có quyền truy cập vào bảng dữ liệu qua SQL, nhưng khi cần đọc file thô từ Amazon S3 để huấn luyện mô hình, bạn lại bị từ chối vì thiếu quyền trong S3 bucket policy.
 
-Việc phải duy trì song song hai hệ thống chính sách — một bên là Lake Formation cho bảng, một bên là IAM/S3 cho tệp — không chỉ gây tốn thời gian mà còn tiềm ẩn rủi ro **sai lệch quyền hạn (permission drift)**.
+Việc phải duy trì song song hai hệ thống chính sách - một bên là Lake Formation cho bảng, một bên là IAM/S3 cho tệp - không chỉ gây tốn thời gian mà còn tiềm ẩn rủi ro **sai lệch quyền hạn (permission drift)**.
 
 ---
 
@@ -57,10 +59,10 @@ Sức mạnh của tính năng này nằm ở một API mới mang tên **`GetTe
 
 ## Bài học rút ra
 
-- Một hệ thống phân quyền duy nhất — không còn phải bảo trì song song giữa Lake Formation và S3 bucket policy
+- Một hệ thống phân quyền duy nhất - không còn phải bảo trì song song giữa Lake Formation và S3 bucket policy
 - `GetTemporaryDataLocationCredentials()` là API làm nên sự khác biệt
 - Đây là tính năng cần thiết cho các team ML đang xây dựng training pipeline trên data lake có quản trị
-- Audit trail được thống nhất — các team tuân thủ sẽ thực sự trân trọng điều này
+- Audit trail được thống nhất - các team tuân thủ sẽ thực sự trân trọng điều này
 
 ---
 

@@ -10,6 +10,8 @@ pre: " <b> 3.1. </b> "
 
 > **Bài gốc:** [Real-time CDC from Aurora PostgreSQL to Amazon S3 Tables using Debezium and Firehose](https://aws.amazon.com/blogs/big-data/real-time-cdc-from-aurora-postgresql-to-amazon-s3-tables-using-debezium-and-firehose/)
 
+> **Bài dịch:** [Real-time CDC from Aurora PostgreSQL to Amazon S3 Tables using Debezium and Firehose](https://www.facebook.com/groups/awsstudygroupfcj/permalink/2199216520843308/?rdid=AAZBwZqs23GM5W9s#)
+
 ---
 
 Trong kỷ nguyên dữ liệu hiện nay, việc tách biệt dữ liệu giao dịch (OLTP) và dữ liệu phân tích (OLAP) là cực kỳ quan trọng. Nếu bạn chạy các truy vấn phân tích nặng nề trực tiếp trên cụm Amazon Aurora, hiệu năng hệ thống giao dịch chắc chắn sẽ bị ảnh hưởng.
@@ -33,9 +35,9 @@ Hệ thống được thiết kế tối ưu với 6 bước truyền dẫn dữ
 | Bước | Từ → Đến | Mô tả |
 |------|----------|-------|
 | 1 | Aurora PostgreSQL → Debezium | Debezium chạy trên MSK Connect đọc thay đổi từ WAL của PostgreSQL, hầu như không gây áp lực hiệu năng |
-| 2 | Debezium → Amazon MSK | `ByLogicalTableRouter` gộp thay đổi từ nhiều bảng vào một Kafka topic — tiết kiệm chi phí và giảm độ phức tạp |
+| 2 | Debezium → Amazon MSK | `ByLogicalTableRouter` gộp thay đổi từ nhiều bảng vào một Kafka topic - tiết kiệm chi phí và giảm độ phức tạp |
 | 3 | Amazon MSK → Firehose | Amazon Data Firehose liên tục thăm dò dữ liệu từ MSK qua AWS PrivateLink |
-| 4 | AWS Lambda | "Bộ não" chuyển đổi — giải mã dữ liệu, làm phẳng cấu trúc Debezium, gắn metadata (tên bảng + loại thao tác) |
+| 4 | AWS Lambda | "Bộ não" chuyển đổi - giải mã dữ liệu, làm phẳng cấu trúc Debezium, gắn metadata (tên bảng + loại thao tác) |
 | 5 | Firehose → S3 Tables | Firehose dựa vào metadata từ Lambda để đẩy vào đúng bảng Iceberg tương ứng |
 | 6 | Truy vấn & Phân quyền | Dữ liệu sẵn sàng truy vấn qua Amazon Athena hoặc Redshift, kiểm soát bởi AWS Lake Formation |
 

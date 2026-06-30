@@ -10,6 +10,8 @@ pre: " <b> 3.3. </b> "
 
 > **Bài gốc:** [Data Migrations at Scale with Amazon S3 File Gateway](https://aws.amazon.com/vi/blogs/storage/data-migrations-at-scale-with-amazon-s3-file-gateway)
 
+> **Bài dịch:** [Data Migrations at Scale with Amazon S3 File Gateway](https://www.facebook.com/photo/?fbid=1029722426099971&set=gm.2200052700759690&idorvanity=660548818043427)
+
 ---
 
 Nếu bạn đang quản lý hệ thống máy chủ lưu trữ nội bộ (on-premises) và muốn di chuyển một lượng lớn dữ liệu lên đám mây, chắc hẳn bạn đã hoặc sẽ gặp phải bài toán này: **Làm sao để di chuyển mà vẫn giữ nguyên cấu trúc cũng như ngày giờ tạo gốc của các tệp tin?**
@@ -22,7 +24,7 @@ Việc dữ liệu bị "làm mới" thời gian lúc tải lên đám mây khô
 
 Khi di chuyển dữ liệu lên Amazon S3 thông qua **S3 File Gateway**, hệ thống sẽ tự động lấy **Ngày sửa đổi (Modified Date)** từ tệp nguồn để gán thành **Ngày tạo (Create Date)** mới trên S3.
 
-Sự thay đổi này làm tuổi thọ của tệp bị "reset", khiến các **Chính sách Vòng đời (S3 Lifecycle Policy)** không thể tự động phân loại và đẩy những dữ liệu cũ vào các lớp lưu trữ giá rẻ dựa trên tuổi đời thật của chúng — gây lãng phí ngân sách lưu trữ của doanh nghiệp.
+Sự thay đổi này làm tuổi thọ của tệp bị "reset", khiến các **Chính sách Vòng đời (S3 Lifecycle Policy)** không thể tự động phân loại và đẩy những dữ liệu cũ vào các lớp lưu trữ giá rẻ dựa trên tuổi đời thật của chúng - gây lãng phí ngân sách lưu trữ của doanh nghiệp.
 
 ---
 
@@ -67,7 +69,7 @@ Bất cứ khi nào có lệnh `PUT` để ghi một object lên S3, Lambda sẽ
 
 ## Bài học rút ra
 
-- Bảo toàn metadata khi di chuyển lên đám mây không chỉ là "tính năng thêm" — nó ảnh hưởng trực tiếp đến chi phí lưu trữ
+- Bảo toàn metadata khi di chuyển lên đám mây không chỉ là "tính năng thêm" - nó ảnh hưởng trực tiếp đến chi phí lưu trữ
 - Trường `mtime` được lưu dưới dạng S3 object metadata là chìa khóa để kích hoạt lifecycle policy dựa trên tuổi thật của file
 - Mô hình ba thành phần (Robocopy + S3 File Gateway + Lambda) có thể tái sử dụng cho bất kỳ dự án di chuyển on-premises lên cloud nào
 - Chế độ `/L` dry-run của Robocopy là người bạn tốt nhất trước khi chạy migration thật

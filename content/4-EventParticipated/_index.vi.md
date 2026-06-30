@@ -46,7 +46,7 @@ Trong quá trình thực tập, em đã tham gia 4 events, với mỗi event là
 ---
 
 ### [Event 4](4.4-Event4/)
-&emsp;**Tên sự kiện:** FCAJ COMMUNITY DAY — "DATA DRIVEN, AI RISEN"
+&emsp;**Tên sự kiện:** FCAJ COMMUNITY DAY - "DATA DRIVEN, AI RISEN"
 
 &emsp;**Thời gian:** 09:00, Thứ Bảy, ngày 27/06/2026
 

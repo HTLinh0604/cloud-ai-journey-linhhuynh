@@ -42,7 +42,7 @@ During my internship, I participated in four events. Each one was a memorable ex
 ---
 
 ### [Event 4](4.4-Event4/)  
-&emsp;**Event Name:** FCAJ COMMUNITY DAY — "DATA DRIVEN, AI RISEN"  
+&emsp;**Event Name:** FCAJ COMMUNITY DAY - "DATA DRIVEN, AI RISEN"  
 
 &emsp;**Date & Time:** 09:00, Saturday, June 27, 2026  
 

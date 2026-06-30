@@ -10,11 +10,13 @@ pre: " <b> 3.3. </b> "
 
 > **Original article:** [Data Migrations at Scale with Amazon S3 File Gateway](https://aws.amazon.com/vi/blogs/storage/data-migrations-at-scale-with-amazon-s3-file-gateway)
 
+> **Translation:** [Data Migrations at Scale with Amazon S3 File Gateway](https://www.facebook.com/photo/?fbid=1029722426099971&set=gm.2200052700759690&idorvanity=660548818043427)
+
 ---
 
-If you're managing on-premises storage servers and want to migrate a large volume of data to the cloud, you've likely encountered — or will soon face — this tricky challenge: **How do you migrate data while preserving the original file structure and creation timestamps?**
+If you're managing on-premises storage servers and want to migrate a large volume of data to the cloud, you've likely encountered - or will soon face - this tricky challenge: **How do you migrate data while preserving the original file structure and creation timestamps?**
 
-When data is "refreshed" upon upload to the cloud, you don't just lose important historical information — you also lose the opportunity to leverage automatic tiering policies to cut storage costs for aging data.
+When data is "refreshed" upon upload to the cloud, you don't just lose important historical information - you also lose the opportunity to leverage automatic tiering policies to cut storage costs for aging data.
 
 ---
 
@@ -22,7 +24,7 @@ When data is "refreshed" upon upload to the cloud, you don't just lose important
 
 When migrating data to Amazon S3 via **S3 File Gateway**, the system automatically takes the source file's **Modified Date** and assigns it as the new **Create Date** on S3.
 
-This resets the file's age, which means **S3 Lifecycle Policies** can no longer automatically classify and push old data into cheaper storage tiers based on their true age — wasting the organization's storage budget.
+This resets the file's age, which means **S3 Lifecycle Policies** can no longer automatically classify and push old data into cheaper storage tiers based on their true age - wasting the organization's storage budget.
 
 ---
 
@@ -39,9 +41,9 @@ The Lambda function automatically reads the file's real timestamps and moves the
 | Benefit | Description |
 |---------|-------------|
 | **Preserve original metadata** | Retain original creation time, modification time, and NTFS access permissions during transition |
-| **Cost optimization at scale** | Automatically push older files into low-cost S3 storage tiers based on their *true* age — not the cloud upload date |
+| **Cost optimization at scale** | Automatically push older files into low-cost S3 storage tiers based on their *true* age - not the cloud upload date |
 | **Hybrid Cloud support** | Businesses can still access cloud data from on-premises applications via familiar SMB and NFS protocols without changing the existing environment |
-| **Full automation** | Leverage Lambda's deep S3 integration to automatically execute storage class transitions — no manual intervention needed |
+| **Full automation** | Leverage Lambda's deep S3 integration to automatically execute storage class transitions - no manual intervention needed |
 
 ---
 
@@ -67,7 +69,7 @@ Whenever a `PUT` command writes an object to S3, Lambda is triggered, extracts t
 
 ## Key Takeaways
 
-- Metadata preservation during cloud migration is not just a "nice to have" — it directly impacts storage costs
+- Metadata preservation during cloud migration is not just a "nice to have" - it directly impacts storage costs
 - The `mtime` field stored as S3 object metadata is the key that unlocks true-age-based lifecycle policies
 - This three-component pattern (Robocopy + S3 File Gateway + Lambda) is reusable across any large-scale on-premises to cloud migration
 - `/L` dry-run mode in Robocopy is your best friend before running the real migration

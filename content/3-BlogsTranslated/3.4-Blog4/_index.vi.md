@@ -10,6 +10,8 @@ pre: " <b> 3.4. </b> "
 
 > **Bài gốc:** [Automate Amazon Aurora PostgreSQL Major or Minor Version Upgrade Using AWS Systems Manager and Amazon EC2](https://aws.amazon.com/blogs/database/automate-amazon-aurora-postgresql-major-or-minor-version-upgrade-using-aws-systems-manager-and-amazon-ec2/)
 
+> **Bài dịch:** [Automate Amazon Aurora PostgreSQL Major or Minor Version Upgrade Using AWS Systems Manager and Amazon EC2](https://www.facebook.com/groups/awsstudygroupfcj/permalink/2181404265957867/?rdid=g9DRm6bfvHIxjqpG#)
+
 ---
 
 Việc quản lý và nâng cấp các phiên bản lớn (major) hay nhỏ (minor) cho hàng loạt cụm cơ sở dữ liệu Amazon Aurora PostgreSQL chưa bao giờ là công việc dễ dàng. Nếu thực hiện thủ công, bạn không chỉ tốn hàng giờ đồng hồ mà còn đối mặt với rủi ro sai sót cấu hình rất lớn.
@@ -32,7 +34,7 @@ Bài viết này chia sẻ một giải pháp **tự động hóa toàn diện**
 
 | Dịch vụ | Vai trò |
 |---------|---------|
-| **AWS Systems Manager** | "Nhạc trưởng" — điều phối toàn bộ công việc |
+| **AWS Systems Manager** | "Nhạc trưởng" - điều phối toàn bộ công việc |
 | **Amazon EC2** | Thực thi các script tự động hóa và lệnh CLI |
 | **AWS Secrets Manager** | Lưu trữ an toàn mật khẩu quản trị của DB |
 | **Amazon S3** | Lưu trữ log chi tiết từ mỗi lần nâng cấp |
@@ -42,7 +44,7 @@ Bài viết này chia sẻ một giải pháp **tự động hóa toàn diện**
 
 ## 3. Quy trình hoạt động trong 2 giai đoạn
 
-Hệ thống sử dụng **thẻ (tags)** làm cơ chế kích hoạt — bạn chỉ cần gắn tag `"UpgradeDB: Y"` vào các cluster muốn nâng cấp, hệ thống tự động nhận diện. Quy trình gồm hai giai đoạn:
+Hệ thống sử dụng **thẻ (tags)** làm cơ chế kích hoạt - bạn chỉ cần gắn tag `"UpgradeDB: Y"` vào các cluster muốn nâng cấp, hệ thống tự động nhận diện. Quy trình gồm hai giai đoạn:
 
 ### Giai đoạn 1: PREUPGRADE (Tiền nâng cấp)
 Đây là bước cực kỳ quan trọng. Hệ thống sẽ:

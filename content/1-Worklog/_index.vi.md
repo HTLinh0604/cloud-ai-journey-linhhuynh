@@ -6,31 +6,20 @@ chapter: false
 pre: " <b> 1. </b> "
 ---
 
+Đây là nhật ký công việc của mình trong suốt chương trình thực tập **First Cloud AI Journey** - chương trình thực tập về Cloud và AI trên nền tảng AWS. Mỗi entry ghi lại mục tiêu học tập trong ngày, các dịch vụ được khám phá, các task thực hành đã hoàn thành và bài học rút ra.
 
-Đây là nhật ký công việc của tôi trong suốt **12 tuần** tham gia chương trình **First Cloud AI Journey** — một chương trình thực tập về Cloud và AI trên nền tảng AWS. Mỗi tuần tôi sẽ ghi lại những gì đã học được, các dịch vụ đã thực hành, và những bài học rút ra trong hành trình khám phá AWS.
+Chương trình kéo dài khoảng **3 tháng** (20/04 – 15/07/2026), bao gồm các nội dung từ cơ bản đến nâng cao về điện toán đám mây, AI/ML, data engineering, bảo mật và kiến trúc hệ thống trên AWS.
 
-Chương trình kéo dài khoảng **3 tháng**, bao gồm các nội dung từ cơ bản đến nâng cao về điện toán đám mây, AI/ML, bảo mật và kiến trúc hệ thống trên AWS.
+---
 
-**Tuần 1:** [Làm quen với AWS và các dịch vụ cơ bản, Thiết lập tài khoản và hệ thống giám sát chi phí](1.1-week1/)
+**Ngày 1**: [Thiết lập tài khoản, AWS Credits & 5 Tasks thực hành (EC2, Bedrock, Budgets, Lambda, RDS)](1.1-Day1/)
 
-**Tuần 2:** [Khám phá các dịch vụ AWS — CLI, DynamoDB, Lambda, CDK, CloudFormation, Glue, Athena, VPC, S3 & RDS](1.2-week2/)
+**Ngày 2**: [Giám sát chi phí đa lớp, Advanced Analytics & Lý thuyết nền tảng AWS](1.2-Day2/)
 
-**Tuần 3:** [Làm công việc B...](1.3-week3/)
+**Ngày 3**: [AWS CLI, DynamoDB, CloudFront & Lambda@Edge, Web Server EC2 trên VPC tùy chỉnh](1.3-Day3/)
 
-**Tuần 4:** [Làm công việc C...](1.4-week4/)
+**Ngày 4**: [AWS Lambda, AWS CDK, VS Code Toolkit, EBS DLM & S3 Lifecycle Policies](1.4-Day4/)
 
-**Tuần 5:** [Làm công việc D...](1.5-week5/)
+**Ngày 5**: [AWS CloudFormation, AWS Glue & Athena, Khởi tạo cơ sở dữ liệu quan hệ RDS](1.5-Day5/)
 
-**Tuần 6:** [Làm công việc E...](1.6-week6/)
-
-**Tuần 7:** [Làm công việc G...](1.7-week7/)
-
-**Tuần 8:** [Làm công việc H...](1.8-week8/)
-
-**Tuần 9:** [Làm công việc I...](1.9-week9/)
-
-**Tuần 10:** [Làm công việc L...](1.10-week10/)
-
-**Tuần 11:** [Làm công việc M...](1.11-week11/)
-
-**Tuần 12:** [Làm công việc N...](1.12-week12/)
+**Ngày 6**: [Thử nghiệm Data Pipeline IaC với Floci & LocalStack, EMR, Kinesis, Firehose, Lake Formation, Redshift & QuickSight](1.6-Day6/)

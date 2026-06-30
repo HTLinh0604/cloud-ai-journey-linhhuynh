@@ -10,6 +10,9 @@ pre: " <b> 3.4. </b> "
 
 > **Original article:** [Automate Amazon Aurora PostgreSQL Major or Minor Version Upgrade Using AWS Systems Manager and Amazon EC2](https://aws.amazon.com/blogs/database/automate-amazon-aurora-postgresql-major-or-minor-version-upgrade-using-aws-systems-manager-and-amazon-ec2/)
 
+> **Translation:** [Automate Amazon Aurora PostgreSQL Major or Minor Version Upgrade Using AWS Systems Manager and Amazon EC2](https://www.facebook.com/groups/awsstudygroupfcj/permalink/2181404265957867/?rdid=g9DRm6bfvHIxjqpG#)
+
+
 ---
 
 Managing and upgrading major or minor versions across a fleet of Amazon Aurora PostgreSQL clusters has never been easy. Done manually, it not only takes hours but also carries a high risk of configuration errors.
@@ -22,17 +25,17 @@ This article shares a **comprehensive automation solution** that optimizes this 
 
 The standout feature of this solution is its ability to **reduce manual effort by up to 80%**. Instead of logging into each cluster individually, you can now orchestrate upgrades across your entire database fleet consistently and safely.
 
-Critically, the solution leverages **Aurora's Copy-on-Write cloning** feature. Before making any changes to real data, the system creates an ultra-fast clone — ensuring you always have a safety net if something goes wrong.
+Critically, the solution leverages **Aurora's Copy-on-Write cloning** feature. Before making any changes to real data, the system creates an ultra-fast clone - ensuring you always have a safety net if something goes wrong.
 
 ---
 
 ## 2. The Automation Framework
 
-This is not just a single script — it's a closed-loop process using core AWS services:
+This is not just a single script - it's a closed-loop process using core AWS services:
 
 | Service | Role |
 |---------|------|
-| **AWS Systems Manager** | The "conductor" — orchestrates all work |
+| **AWS Systems Manager** | The "conductor" - orchestrates all work |
 | **Amazon EC2** | Executes automation scripts and CLI commands |
 | **AWS Secrets Manager** | Securely stores DB admin passwords |
 | **Amazon S3** | Stores detailed logs from each upgrade run |
@@ -42,7 +45,7 @@ This is not just a single script — it's a closed-loop process using core AWS s
 
 ## 3. The Two-Phase Upgrade Process
 
-The system uses **tags** as the activation mechanism — you simply tag clusters with `"UpgradeDB: Y"` and the system automatically identifies them. The process runs in two phases:
+The system uses **tags** as the activation mechanism - you simply tag clusters with `"UpgradeDB: Y"` and the system automatically identifies them. The process runs in two phases:
 
 ### Phase 1: PREUPGRADE (Pre-upgrade Validation)
 This is a critically important step. The system will:
@@ -60,7 +63,7 @@ Once everything is validated, activate this mode for the system to:
 
 ## 4. Excellent Monitoring Capabilities
 
-One of the best aspects of this solution is its **detailed logging system**. Every action — from creating the clone, backing up the configuration, to the result of each extension update — is recorded and pushed to S3.
+One of the best aspects of this solution is its **detailed logging system**. Every action - from creating the clone, backing up the configuration, to the result of each extension update - is recorded and pushed to S3.
 
 If one cluster encounters an error, you'll know exactly where the problem lies and can fix it **without affecting other clusters**.
 
@@ -70,7 +73,7 @@ If one cluster encounters an error, you'll know exactly where the problem lies a
 
 If you're managing a large data system on AWS, moving from manual upgrades to automation is an inevitable step. It not only helps you "sleep better" during every maintenance window but also ensures maximum stability for your application.
 
-Start by testing this in a non-production environment and gradually roll it out — the time investment upfront will pay dividends in reliability and peace of mind.
+Start by testing this in a non-production environment and gradually roll it out - the time investment upfront will pay dividends in reliability and peace of mind.
 
 ---
 
