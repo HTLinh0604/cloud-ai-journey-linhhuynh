@@ -6,28 +6,70 @@ chapter: false
 pre: " <b> 5. </b> "
 ---
 
-{{% notice warning %}}
-⚠️ **Lưu ý:** Các thông tin dưới đây chỉ nhằm mục đích tham khảo, vui lòng **không sao chép nguyên văn** cho bài báo cáo của bạn kể cả warning này.
-{{% /notice %}}
+# FinOps-Optimized Serverless Medallion Data Lakehouse - Workshop
 
+## Giới thiệu Workshop
 
-# Đảm bảo truy cập Hybrid an toàn đến S3 bằng cách sử dụng VPC endpoint
+Workshop thực hành này hướng dẫn bạn xây dựng một **data lakehouse hoàn toàn serverless, thuần cloud** trên AWS từ đầu. Bạn sẽ triển khai một pipeline dữ liệu end-to-end hoàn chỉnh để tiếp nhận, chuyển đổi và trực quan hóa dữ liệu hành vi khách hàng sử dụng **Kiến trúc Medallion** (Raw → Bronze → Silver → Gold), áp dụng **FinOps best practices** để giữ chi phí ở mức tối thiểu xuyên suốt.
 
-#### Tổng quan
+Cuối workshop, bạn sẽ có một pipeline end-to-end hoàn chỉnh chạy trên tài khoản AWS của riêng mình.
 
-**AWS PrivateLink** cung cấp kết nối riêng tư đến các dịch vụ aws từ VPCs hoặc trung tâm dữ liệu (on-premise) mà không làm lộ lưu lượng truy cập ra ngoài public internet.
+## Những gì bạn sẽ xây dựng
 
-Trong bài lab này, chúng ta sẽ học cách tạo, cấu hình, và kiểm tra VPC endpoints để cho phép workload của bạn tiếp cận các dịch vụ AWS mà không cần đi qua Internet công cộng.
+```
+Events từ Website/Mobile
+        │
+        ▼
+  API Gateway ──► Firehose ──► Lambda (chuyển đổi nội tuyến)
+                                       │
+                                       ▼
+                                  S3: Raw/Streaming
+                                       │
+  DB đơn hàng ──► EventBridge ──► Lambda ──► S3: Raw/Batch
+                                       │
+                              ┌────────┘
+                              ▼
+                      AWS Glue ETL Job 1
+                      (Raw → Bronze: CSV sang Parquet)
+                              │
+                              ▼
+                      AWS Glue ETL Job 2
+                      (Bronze → Silver: Làm sạch, Loại bỏ trùng)
+                              │
+                              ▼
+                      AWS Glue ETL Job 3
+                      (Silver → Gold: Tổng hợp nghiệp vụ)
+                              │
+                        ┌─────┘
+                        ▼
+                  Glue Data Catalog
+                        │
+                        ▼
+                  Amazon Athena (Truy vấn SQL)
+                        │
+                        ▼
+              Streamlit Dashboard (EC2 + VPC)
+```
 
-Chúng ta sẽ tạo hai loại endpoints để truy cập đến Amazon S3: gateway vpc endpoint và interface vpc endpoint. Hai loại vpc endpoints này mang đến nhiều lợi ích tùy thuộc vào việc bạn truy cập đến S3 từ môi trường cloud hay từ trung tâm dữ liệu (on-premise).
-+ **Gateway** - Tạo gateway endpoint để gửi lưu lượng đến Amazon S3 hoặc DynamoDB using private IP addresses. Bạn điều hướng lưu lượng từ VPC của bạn đến gateway endpoint bằng các bảng định tuyến (route tables)
-+ **Interface** - Tạo interface endpoint để gửi lưu lượng đến các dịch vụ điểm cuối (endpoints) sử dụng Network Load Balancer để phân phối lưu lượng. Lưu lượng dành cho dịch vụ điểm cuối được resolved bằng DNS.
+## Các phần của Workshop
 
-#### Nội dung
+1. [Tổng quan](5.1-Overview/)
+2. [Điều kiện tiên quyết](5.2-Prerequisite/)
+3. [Mô tả kiến trúc](5.3-Architecture/)
+4. [Các bước thực hành](5.4-Steps/)
+   - [Bước 1: Thiết lập VPC & Mạng](5.4-Steps/5.4.1-VPC/)
+   - [Bước 2: Tạo S3 Buckets & Lưu trữ](5.4-Steps/5.4.2-S3/)
+   - [Bước 3: Tạo AWS Glue ETL Jobs](5.4-Steps/5.4.3-Glue/)
+   - [Bước 4: Truy vấn với Amazon Athena](5.4-Steps/5.4.4-Athena/)
+   - [Bước 5: Deploy Streamlit Dashboard trên EC2](5.4-Steps/5.4.5-EC2-Dashboard/)
+   - [Bước 6: Giám sát với CloudWatch](5.4-Steps/5.4.6-Monitoring/)
+5. [Dọn dẹp tài nguyên](5.5-Cleanup/)
 
-1. [Tổng quan về workshop](5.1-Workshop-overview/)
-2. [Chuẩn bị](5.2-Prerequiste/)
-3. [Truy cập đến S3 từ VPC](5.3-S3-vpc/)
-4. [Truy cập đến S3 từ TTDL On-premises](5.4-S3-onprem/)
-5. [VPC Endpoint Policies (làm thêm)](5.5-Policy/)
-6. [Dọn dẹp tài nguyên](5.6-Cleanup/)
+## Thời gian & Chi phí ước tính
+
+| Mục | Giá trị |
+|-----|---------|
+| **Thời gian** | ~3–4 giờ (toàn bộ workshop) |
+| **Chi phí ước tính** | ~$1–3 USD (nếu dọn dẹp trong ngày) |
+| **AWS Region** | `us-east-1` (N. Virginia) - khuyến nghị |
+| **Độ khó** | Trung cấp |

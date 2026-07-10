@@ -5,27 +5,71 @@ weight: 5
 chapter: false
 pre: " <b> 5. </b> "
 ---
-{{% notice warning %}}
-⚠️ **Note:** The information below is for reference purposes only. Please **do not copy verbatim** for your report, including this warning.
-{{% /notice %}}
 
-# Secure Hybrid Access to S3 using VPC Endpoints
+# FinOps-Optimized Serverless Medallion Data Lakehouse - Workshop
 
-#### Overview
+## About This Workshop
 
-**AWS PrivateLink** provides private connectivity to AWS services from VPCs and your on-premises networks, without exposing your traffic to the Public Internet.
+This hands-on workshop walks you through building a **cloud-native, fully serverless data lakehouse** on AWS from scratch. You will implement a complete data pipeline that ingests, transforms, and visualizes customer behavior data using the **Medallion Architecture** (Raw → Bronze → Silver → Gold), following **FinOps best practices** to keep costs minimal throughout.
 
-In this lab, you will learn how to create, configure, and test VPC endpoints that enable your workloads to reach AWS services without traversing the Public Internet.
+By the end of this workshop, you will have a fully working end-to-end pipeline running on your own AWS account.
 
-You will create two types of endpoints to access Amazon S3: a Gateway VPC endpoint, and an Interface VPC endpoint. These two types of VPC endpoints offer different benefits depending on if you are accessing Amazon S3 from the cloud or your on-premises location
-+ **Gateway** - Create a gateway endpoint to send traffic to Amazon S3 or DynamoDB using private IP addresses.You route traffic from your VPC to the gateway endpoint using route tables.
-+ **Interface** - Create an interface endpoint to send traffic to endpoint services that use a Network Load Balancer to distribute traffic. Traffic destined for the endpoint service is resolved using DNS.
+## What You Will Build
 
-#### Content
+```
+Website/Mobile Events
+        │
+        ▼
+  API Gateway ──► Firehose ──► Lambda (inline transform)
+                                       │
+                                       ▼
+                                  S3: Raw/Streaming
+                                       │
+  E-commerce DB ──► EventBridge ──► Lambda ──► S3: Raw/Batch
+                                       │
+                              ┌────────┘
+                              ▼
+                      AWS Glue ETL Job 1
+                      (Raw → Bronze: CSV to Parquet)
+                              │
+                              ▼
+                      AWS Glue ETL Job 2
+                      (Bronze → Silver: Cleanse, Deduplicate)
+                              │
+                              ▼
+                      AWS Glue ETL Job 3
+                      (Silver → Gold: Business Aggregations)
+                              │
+                        ┌─────┘
+                        ▼
+                  Glue Data Catalog
+                        │
+                        ▼
+                  Amazon Athena (SQL Query)
+                        │
+                        ▼
+              Streamlit Dashboard (EC2 + VPC)
+```
 
-1. [Workshop overview](5.1-Workshop-overview)
-2. [Prerequiste](5.2-Prerequiste/)
-3. [Access S3 from VPC](5.3-S3-vpc/)
-4. [Access S3 from On-premises](5.4-S3-onprem/)
-5. [VPC Endpoint Policies (Bonus)](5.5-Policy/)
-6. [Clean up](5.6-Cleanup/)
+## Workshop Sections
+
+1. [Overview](5.1-Overview/)
+2. [Prerequisite](5.2-Prerequisite/)
+3. [Architecture Description](5.3-Architecture/)
+4. [Hands-On Steps](5.4-Steps/)
+   - [Step 1: VPC & Networking Setup](5.4-Steps/5.4.1-VPC/)
+   - [Step 2: S3 Buckets & Storage Setup](5.4-Steps/5.4.2-S3/)
+   - [Step 3: AWS Glue ETL Jobs](5.4-Steps/5.4.3-Glue/)
+   - [Step 4: Amazon Athena Queries](5.4-Steps/5.4.4-Athena/)
+   - [Step 5: Deploy Streamlit Dashboard on EC2](5.4-Steps/5.4.5-EC2-Dashboard/)
+   - [Step 6: Monitoring with CloudWatch](5.4-Steps/5.4.6-Monitoring/)
+5. [Clean-up](5.5-Cleanup/)
+
+## Estimated Time & Cost
+
+| Item | Value |
+|------|-------|
+| **Duration** | ~3–4 hours (full workshop) |
+| **Estimated Cost** | ~$1–3 USD (if cleaned up same day) |
+| **AWS Region** | `us-east-1` (N. Virginia) - recommended |
+| **Difficulty** | Intermediate |
