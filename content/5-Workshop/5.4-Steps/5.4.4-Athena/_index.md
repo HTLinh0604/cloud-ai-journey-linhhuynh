@@ -8,9 +8,16 @@ pre: " <b> 5.4.4 </b> "
 
 # Step 4: Amazon Athena Queries
 
-In this step, you will configure Amazon Athena to query the Gold-tier tables registered in the Glue Data Catalog, verify the pipeline results, and explore the data with sample business queries.
+In this step, you will configure Amazon Athena to query the Gold-tier tables registered in the Glue Data Catalog, verify the pipeline results, and explore the data with business queries.
 
 **Estimated time:** 15–20 minutes
+
+---
+
+## Prerequisites
+
+- Step 3 complete (Glue ETL jobs ran successfully, 7 tables in Glue Catalog)
+- S3 `athena-results/` prefix exists
 
 ---
 
@@ -21,15 +28,26 @@ In this step, you will configure Amazon Athena to query the Gold-tier tables reg
 | Field | Value |
 |-------|-------|
 | Query result location | `s3://customer-behavior-lakehouse1/athena-results/` |
-| Encryption | SSE-KMS (or SSE-S3 for simplicity) |
+| Encryption | SSE-S3 |
 
 Click **Save**.
 
 > ⚠️ **Important:** Athena cannot run queries until a result location is configured. This step is mandatory.
 
+**CLI alternative:**
+```bash
+aws athena update-work-group \
+    --work-group primary \
+    --configuration-updates '{
+        "ResultConfigurationUpdates": {
+            "OutputLocation": "s3://customer-behavior-lakehouse1/athena-results/"
+        }
+    }'
+```
+
 ---
 
-## 4.2 Configure Athena Workgroup (FinOps)
+## 4.2 Configure Athena Workgroup (FinOps Best Practice)
 
 Create a dedicated Workgroup with per-query cost controls:
 
@@ -47,24 +65,31 @@ Create a dedicated Workgroup with per-query cost controls:
 
 Click **Create workgroup**.
 
-> 💡 **FinOps note:** The 1 GB per-query scan limit acts as a safety net - any runaway query that would scan too much data is automatically cancelled before incurring excessive cost.
+> 💡 **FinOps note:** The 1 GB per-query scan limit acts as a safety net - any runaway query that would scan too much data is automatically cancelled before incurring excessive cost. At $5/TB, 1 GB = $0.005 maximum per query.
 
 ---
 
-## 4.3 Select the Database
+## 4.3 Select the Database in Query Editor
 
 In the Athena Query Editor:
 - **Data source**: `AwsDataCatalog`
 - **Database**: `customer_behavior_catalog_db`
 - **Workgroup**: `lakehouse-wg`
 
-You should see 7 tables in the left panel: `daily_revenue`, `payment_summary`, `country_revenue`, `device_summary`, `source_summary`, `event_summary`, `dashboard_summary`.
+You should see 7 tables in the left panel:
+- `dashboard_summary`
+- `daily_revenue`
+- `event_summary`
+- `country_revenue`
+- `device_summary`
+- `payment_summary`
+- `source_summary`
 
 ---
 
-## 4.4 Create External Tables (If Not Auto-Registered)
+## 4.4 Create External Tables (Manual Fallback)
 
-If the Glue ETL Job 3 did not auto-register tables (or for manual verification), run the CREATE TABLE statements from `athena_create_tables.sql`:
+If the Glue ETL Job 3 did not auto-register tables (or for manual verification), run the `CREATE TABLE` statements from `athena_create_tables.sql`:
 
 ```sql
 -- Dashboard Summary table
@@ -137,78 +162,123 @@ LOCATION 's3://customer-behavior-lakehouse1/gold/source_summary/';
 
 ---
 
-## 4.5 Run Business Queries
+## 4.5 Run Business Queries & Validate Results
 
 Execute the following queries from `athena_queries.sql` to verify the pipeline results:
 
-**Query 1: Overall dashboard metrics**
+### Query 1: Overall Dashboard Metrics
+
 ```sql
 SELECT * FROM dashboard_summary;
 ```
 
-> 📌 **[INSERT SCREENSHOT: Athena Dashboard Summary result]**
-> `![Dashboard Summary](/result/Athenas/Dashboard Summary.jpg)`
+**Expected result:** 1 row with total orders, customers, revenue, average order value, and total events.
 
-**Query 2: Daily revenue trend (ordered by date)**
+![Athena - Dashboard Summary query result](/result/Athenas/Dashboard%20Summary.jpg)
+
+---
+
+### Query 2: Daily Revenue Trend
+
 ```sql
-SELECT * FROM daily_revenue ORDER BY order_date;
+SELECT *
+FROM daily_revenue
+ORDER BY order_date;
 ```
 
-> 📌 **[INSERT SCREENSHOT: Athena daily revenue query result]**
-> `![Daily Revenue Athena](/result/Athenas/daily revenue.jpg)`
+**Expected result:** ~365 rows, one per day, showing daily revenue totals.
 
-> 📌 **[INSERT SCREENSHOT: Daily Revenue CSV result]**
-> `![Daily Revenue Result](/result/Athenas/result_daily_revenue.jpg)`
+![Athena - Daily Revenue query in editor](/result/Athenas/daily%20revenue.jpg)
 
-**Query 3: Top events by frequency**
+![Athena - Daily Revenue result data](/result/Athenas/result_daily_revenue.jpg)
+
+---
+
+### Query 3: Event Frequency
+
 ```sql
-SELECT * FROM event_summary ORDER BY total_events DESC;
+SELECT *
+FROM event_summary
+ORDER BY total_events DESC;
 ```
 
-> 📌 **[INSERT SCREENSHOT: Athena Event Summary result]**
-> `![Event Summary](/result/Athenas/Event Summary.jpg)`
+**Expected result:** 5–8 rows showing event types (page_view, add_to_cart, purchase, checkout, etc.) sorted by frequency.
 
-**Query 4: Revenue by country (top countries)**
+![Athena - Event Summary query result](/result/Athenas/Event%20Summary.jpg)
+
+---
+
+### Query 4: Revenue by Country
+
 ```sql
-SELECT * FROM country_revenue ORDER BY total_revenue DESC LIMIT 10;
+SELECT *
+FROM country_revenue
+ORDER BY total_revenue DESC
+LIMIT 10;
 ```
 
-**Query 5: Revenue by payment method**
+**Expected result:** Countries sorted by total revenue - e.g., US, UK, DE, FR, JP, VN, SG.
+
+---
+
+### Query 5: Revenue by Payment Method
+
 ```sql
-SELECT * FROM payment_summary ORDER BY total_revenue DESC;
+SELECT *
+FROM payment_summary
+ORDER BY total_revenue DESC;
 ```
 
-**Query 6: Revenue by device type**
+**Expected result:** 3 rows: credit_card, paypal, bank_transfer.
+
+---
+
+### Query 6: Revenue by Device Type
+
 ```sql
-SELECT * FROM device_summary ORDER BY total_revenue DESC;
+SELECT *
+FROM device_summary
+ORDER BY total_revenue DESC;
 ```
 
-**Query 7: Revenue by traffic source**
+**Expected result:** 3 rows: mobile, desktop, tablet.
+
+---
+
+### Query 7: Revenue by Traffic Source
+
 ```sql
-SELECT * FROM source_summary ORDER BY total_revenue DESC;
+SELECT *
+FROM source_summary
+ORDER BY total_revenue DESC;
 ```
+
+**Expected result:** 4 rows: organic, social, email, paid_ads.
 
 ---
 
 ## 4.6 Check Metrics & Cost
 
-After running queries, check:
+After running queries, verify performance metrics:
 
 **Data scanned per query:**
 
-In Athena Query Editor, after each query completes, look at the **Data scanned** metric shown below the results. With Parquet format and no partitioning, expect:
-- Small Gold tables (~100 KB – 5 MB) → data scanned ≈ same size
-- Much less than if querying raw CSV/JSON directly
+In Athena Query Editor, after each query completes, look at the **Data scanned** metric shown below the results. With Parquet format on compact Gold tables:
+- `dashboard_summary` → ~5–20 KB scanned
+- `daily_revenue` → ~10–50 KB scanned
+- `country_revenue` → ~5–20 KB scanned
 
-**CloudWatch metrics for Athena:**
+This is extremely efficient compared to scanning raw CSV (which would scan 1–10 MB per query).
+
+**Check CloudWatch metrics for Athena via CLI:**
 ```bash
 aws cloudwatch get-metric-statistics \
     --namespace AWS/Athena \
     --metric-name DataScannedInBytes \
     --dimensions Name=WorkGroup,Value=lakehouse-wg \
-    --start-time 2026-07-10T00:00:00Z \
-    --end-time 2026-07-11T00:00:00Z \
-    --period 86400 \
+    --start-time $(date -u -d '1 hour ago' '+%Y-%m-%dT%H:%M:%SZ') \
+    --end-time $(date -u '+%Y-%m-%dT%H:%M:%SZ') \
+    --period 3600 \
     --statistics Sum
 ```
 
@@ -220,27 +290,44 @@ aws cloudwatch get-metric-statistics \
 ```sql
 SELECT * FROM non_existent_table;
 ```
-Expected error: `Table not found` - Athena returns a clear error message.
+Expected error: `TABLE_NOT_FOUND: line 1:15: Table 'awsdatacatalog.customer_behavior_catalog_db.non_existent_table' does not exist`
 
-**Test 2: Trigger cost limit (workgroup protection)**
+**Test 2: Trigger workgroup cost limit**
 ```sql
--- Query the raw Silver layer directly (larger dataset)
-SELECT * FROM silver_orders LIMIT 1000;
+-- This should fail if Silver table is registered and is large (> 1 GB)
+SELECT * FROM silver_orders;
 ```
-If the Silver table is large enough to exceed 1 GB, Athena will cancel the query with: `Query cancelled - data usage limit exceeded`.
+Expected: `Query cancelled - data usage limit exceeded` (workgroup protection working)
+
+**Test 3: Syntax error handling**
+```sql
+SELECT FROM dashboard_summary;
+```
+Expected: `SYNTAX_ERROR: line 1:8: mismatched input 'FROM'`
 
 ---
 
 ## 4.8 Expected Results Summary
 
-| Table | Expected Row Count | Key Insight |
-|-------|-------------------|-------------|
-| `dashboard_summary` | 1 row | Total orders, customers, revenue, avg order value |
-| `daily_revenue` | ~365 rows | Revenue trend per day for ~1 year of data |
-| `event_summary` | ~5–8 rows | Top event types (page_view, add_to_cart, purchase, etc.) |
-| `country_revenue` | ~7–10 rows | Revenue by country |
-| `device_summary` | 3 rows | mobile, desktop, tablet |
-| `payment_summary` | 3 rows | credit_card, paypal, bank_transfer |
-| `source_summary` | 4 rows | organic, social, email, paid_ads |
+| Table | Expected Row Count | Key Business Insight |
+|-------|-------------------|----------------------|
+| `dashboard_summary` | 1 row | Total orders, customers, revenue, avg order value, total events |
+| `daily_revenue` | ~365 rows | Revenue per day showing growth/decline trends |
+| `event_summary` | ~5–8 rows | Most frequent user actions on the platform |
+| `country_revenue` | ~7–10 rows | Which geography drives the most revenue |
+| `device_summary` | 3 rows | Mobile vs desktop vs tablet revenue split |
+| `payment_summary` | 3 rows | Credit card vs PayPal vs bank transfer preference |
+| `source_summary` | 4 rows | Organic vs paid vs social vs email effectiveness |
+
+---
+
+## Troubleshooting
+
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| `HIVE_METASTORE_ERROR: Database not found` | Wrong database selected in Query Editor | Select `customer_behavior_catalog_db` in the dropdown |
+| `No output location provided` | Query result location not configured | Complete Step 4.1 - set result location |
+| Query returns 0 rows | Gold table is empty (Job 3 failed) | Re-run `silver-to-gold-job` and check it succeeded |
+| `TABLE_NOT_FOUND` | Tables not registered by Job 3 | Run CREATE TABLE statements from Step 4.4 manually |
 
 ✅ **Step 4 complete** - Proceed to [Step 5: Deploy Streamlit Dashboard on EC2](../5.4.5-EC2-Dashboard/)

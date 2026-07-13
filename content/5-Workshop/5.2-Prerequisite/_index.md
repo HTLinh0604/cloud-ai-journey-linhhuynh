@@ -27,7 +27,7 @@ Before starting this workshop, please ensure you have the following ready.
 Your IAM user or role must have permissions for the following services. For simplicity during this workshop, you can attach the following AWS managed policies:
 
 | AWS Managed Policy | Services Covered |
-|-------------------|-----------------|
+|-------------------|--------------------|
 | `AmazonS3FullAccess` | S3 bucket creation, read/write |
 | `AWSGlueConsoleFullAccess` | Glue ETL jobs, Data Catalog |
 | `AmazonAthenaFullAccess` | Athena query execution |
@@ -44,7 +44,7 @@ Your IAM user or role must have permissions for the following services. For simp
 
 ## 3. Tools & Software
 
-### AWS CLI
+### AWS CLI v2
 
 Install and configure the AWS CLI v2:
 
@@ -56,6 +56,10 @@ aws --version
 # Configure credentials
 aws configure
 # Enter: AWS Access Key ID, Secret Access Key, Region (us-east-1), Output format (json)
+
+# Verify configuration works
+aws sts get-caller-identity
+# Expected: your Account ID and IAM user/role ARN
 ```
 
 ### Python 3.9+
@@ -81,7 +85,7 @@ git --version
 
 ## 4. Sample Data Files
 
-This workshop uses synthetic e-commerce data. Download or create the following CSV files to upload to S3:
+This workshop uses synthetic e-commerce data. You need the following CSV files to upload to S3:
 
 | File | Columns | Description |
 |------|---------|-------------|
@@ -92,8 +96,6 @@ This workshop uses synthetic e-commerce data. Download or create the following C
 | `reviews.csv` | review_id, order_id, rating, comment, review_date | Customer reviews |
 | `sessions.csv` | session_id, customer_id, start_time, end_time, device, source | Web/app session data |
 
-> 📌 **[INSERT SCREENSHOT: Sample CSV data structure]**
-
 You can generate synthetic data using Python:
 
 ```python
@@ -101,7 +103,7 @@ import pandas as pd
 import random
 from datetime import datetime, timedelta
 
-# Generate sample orders
+# Generate sample orders (10,000 records)
 orders = []
 for i in range(10000):
     orders.append({
@@ -124,7 +126,7 @@ print("Generated orders.csv with 10,000 records")
 ## 5. Estimated Cost Breakdown
 
 | Service | Workshop Usage | Estimated Cost |
-|---------|---------------|---------------|
+|---------|---------------|----------------|
 | EC2 t3.micro | 4–5 hours | ~$0.05 |
 | S3 storage | ~500 MB total | ~$0.01 |
 | Glue ETL (3 jobs) | 3 × 2 DPUs × 5 min | ~$0.15 |
@@ -154,7 +156,7 @@ No prior experience with Glue, Athena, or Streamlit is required - this workshop 
 
 ## Pre-flight Checklist
 
-Before proceeding to Step 1, confirm:
+Before proceeding to Step 1, confirm all items below:
 
 - [ ] AWS account is active with billing enabled
 - [ ] IAM user/role has necessary permissions listed above
@@ -162,3 +164,5 @@ Before proceeding to Step 1, confirm:
 - [ ] Python 3.9+ installed
 - [ ] Sample CSV data files ready (or generated using the script above)
 - [ ] AWS Region set to `us-east-1`
+
+✅ **All checked?** Proceed to [Architecture Description](../5.3-Architecture/)

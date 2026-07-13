@@ -1,55 +1,55 @@
 ---
-title: "Step 2: S3 & Data Upload"
+title: "Bước 2: S3 & Tải dữ liệu"
 date: 2024-01-01
 weight: 2
 chapter: false
 pre: " <b> 5.4.2 </b> "
 ---
 
-# Step 2: S3 Buckets & Data Upload
+# Bước 2: S3 Buckets & Tải Dữ liệu
 
-In this step, you will create the S3 bucket with the Medallion Architecture prefix structure, configure encryption, and upload the sample data files to the Raw tier.
+Trong bước này, bạn sẽ tạo S3 bucket với cấu trúc prefix Medallion Architecture, cấu hình mã hóa và tải các file dữ liệu mẫu lên tầng Raw.
 
-**Estimated time:** 20–30 minutes
-
----
-
-## Prerequisites
-
-- AWS CLI configured with `AmazonS3FullAccess` and `IAMFullAccess`
-- Sample CSV data files ready (see Section 5.2 for generation script)
+**Thời gian ước tính:** 20–30 phút
 
 ---
 
-## 2.1 Create the S3 Bucket
+## Điều kiện tiên quyết
+
+- AWS CLI được cấu hình với quyền `AmazonS3FullAccess` và `IAMFullAccess`
+- File CSV dữ liệu mẫu đã sẵn sàng (xem Phần 5.2 để xem script tạo dữ liệu)
+
+---
+
+## 2.1 Tạo S3 Bucket
 
 **AWS Console → S3 → Create bucket**
 
-| Field | Value |
-|-------|-------|
+| Trường | Giá trị |
+|--------|---------|
 | Bucket name | `customer-behavior-lakehouse1` |
 | AWS Region | `us-east-1` |
-| Object Ownership | ACLs disabled (recommended) |
-| Block all public access | ✅ Enabled (keep all blocks on) |
-| Bucket versioning | Enable (recommended for data recovery) |
-| Default encryption | Server-side encryption with Amazon S3 managed keys (SSE-S3) |
+| Object Ownership | ACLs disabled (khuyến nghị) |
+| Block all public access | ✅ Bật (giữ tất cả blocks) |
+| Bucket versioning | Enable (khuyến nghị để phục hồi dữ liệu) |
+| Default encryption | Server-side encryption với Amazon S3 managed keys (SSE-S3) |
 
 Click **Create bucket**.
 
-> 💡 **Note:** S3 bucket names are globally unique. If `customer-behavior-lakehouse1` is taken, append your AWS account ID: `customer-behavior-lakehouse1-<account-id>`. Update all references in the ETL scripts accordingly.
+> 💡 **Lưu ý:** Tên S3 bucket là duy nhất toàn cầu. Nếu `customer-behavior-lakehouse1` đã được dùng, thêm Account ID của bạn: `customer-behavior-lakehouse1-<account-id>`. Cập nhật tất cả tham chiếu trong ETL scripts tương ứng.
 
-**CLI alternative:**
+**Tùy chọn CLI:**
 ```bash
 aws s3api create-bucket \
     --bucket customer-behavior-lakehouse1 \
     --region us-east-1
 
-# Enable versioning
+# Bật versioning
 aws s3api put-bucket-versioning \
     --bucket customer-behavior-lakehouse1 \
     --versioning-configuration Status=Enabled
 
-# Enable encryption (SSE-S3)
+# Bật mã hóa (SSE-S3)
 aws s3api put-bucket-encryption \
     --bucket customer-behavior-lakehouse1 \
     --server-side-encryption-configuration '{
@@ -63,12 +63,12 @@ aws s3api put-bucket-encryption \
 
 ---
 
-## 2.2 Create the Folder Structure (S3 Prefixes)
+## 2.2 Tạo Cấu trúc Thư mục (S3 Prefixes)
 
-Inside the bucket, create the following top-level "folders" (S3 prefixes):
+Trong bucket, tạo các "thư mục" (S3 prefix) cấp cao nhất sau:
 
 ```bash
-# Create all required prefixes
+# Tạo tất cả prefix cần thiết
 aws s3api put-object --bucket customer-behavior-lakehouse1 --key raw/
 aws s3api put-object --bucket customer-behavior-lakehouse1 --key bronze/
 aws s3api put-object --bucket customer-behavior-lakehouse1 --key silver/
@@ -78,16 +78,16 @@ aws s3api put-object --bucket customer-behavior-lakehouse1 --key scripts/
 aws s3api put-object --bucket customer-behavior-lakehouse1 --key tmp/
 ```
 
-Or via Console: In the bucket, click **Create folder** for each of: `raw`, `bronze`, `silver`, `gold`, `athena-results`, `scripts`, `tmp`.
+Hoặc qua Console: Trong bucket, click **Create folder** cho từng: `raw`, `bronze`, `silver`, `gold`, `athena-results`, `scripts`, `tmp`.
 
 ---
 
-## 2.3 Upload Sample Data Files to Raw Tier
+## 2.3 Tải File Dữ liệu Mẫu lên Tầng Raw
 
-Upload all 6 CSV files to the `raw/` prefix:
+Tải tất cả 6 file CSV lên prefix `raw/`:
 
 ```bash
-# Upload each CSV file to S3 Raw
+# Tải từng file CSV lên S3 Raw
 aws s3 cp customers.csv    s3://customer-behavior-lakehouse1/raw/customers.csv
 aws s3 cp orders.csv       s3://customer-behavior-lakehouse1/raw/orders.csv
 aws s3 cp products.csv     s3://customer-behavior-lakehouse1/raw/products.csv
@@ -95,11 +95,11 @@ aws s3 cp order_items.csv  s3://customer-behavior-lakehouse1/raw/order_items.csv
 aws s3 cp reviews.csv      s3://customer-behavior-lakehouse1/raw/reviews.csv
 aws s3 cp sessions.csv     s3://customer-behavior-lakehouse1/raw/sessions.csv
 
-# Verify all uploads succeeded
+# Xác minh tất cả upload thành công
 aws s3 ls s3://customer-behavior-lakehouse1/raw/
 ```
 
-**Expected output:**
+**Kết quả mong đợi:**
 ```
 2026-07-06 10:00:00    350000 customers.csv
 2026-07-06 10:00:01   1200000 orders.csv
@@ -109,20 +109,20 @@ aws s3 ls s3://customer-behavior-lakehouse1/raw/
 2026-07-06 10:00:03    320000 sessions.csv
 ```
 
-![S3 Raw - CSV files uploaded (original source data)](/result/S3/S3%20Raw%20-%20d%E1%BB%AF%20li%E1%BB%87u%20g%E1%BB%91c.jpg)
+![S3 Raw - File CSV đã tải lên (dữ liệu nguồn gốc)](/result/S3/S3%20Raw%20-%20d%E1%BB%AF%20li%E1%BB%87u%20g%E1%BB%91c.jpg)
 
 ---
 
-## 2.4 Test Firehose Streaming Ingestion (Optional)
+## 2.4 Kiểm tra Streaming Firehose (Tùy chọn)
 
-If you want to test the streaming path via Firehose:
+Nếu bạn muốn test đường streaming qua Firehose:
 
-**Step A: Create a Firehose Delivery Stream**
+**Bước A: Tạo Firehose Delivery Stream**
 
 **AWS Console → Amazon Data Firehose → Create Firehose stream**
 
-| Field | Value |
-|-------|-------|
+| Trường | Giá trị |
+|--------|---------|
 | Source | Direct PUT |
 | Destination | Amazon S3 |
 | Firehose stream name | `lakehouse-event-stream` |
@@ -130,9 +130,9 @@ If you want to test the streaming path via Firehose:
 | S3 prefix | `raw/streaming/events/!{timestamp:yyyy}/!{timestamp:MM}/!{timestamp:dd}/!{timestamp:HH}/` |
 | S3 error prefix | `raw/streaming/errors/` |
 | Buffer size | 1 MB |
-| Buffer interval | 60 seconds |
+| Buffer interval | 60 giây |
 
-**Step B: Send a test event**
+**Bước B: Gửi sự kiện test**
 
 ```bash
 aws firehose put-record \
@@ -142,38 +142,38 @@ aws firehose put-record \
     }'
 ```
 
-**Step C: Wait and verify**
+**Bước C: Đợi và xác minh**
 
-Wait 60–90 seconds (Firehose buffer interval), then verify data appeared in S3:
+Đợi 60–90 giây (thời gian đệm Firehose), sau đó xác minh dữ liệu đã xuất hiện trong S3:
 
 ```bash
 aws s3 ls s3://customer-behavior-lakehouse1/raw/streaming/ --recursive
 ```
 
-![Firehose streaming data delivered to S3 raw/streaming/](/result/S3/FirehoseStreaming%20%C4%91%C3%A3%20%C4%91%E1%BB%95%20data%20v%C3%A0o%20S3.jpg)
+![Firehose streaming data đã đổ vào S3 raw/streaming/](/result/S3/FirehoseStreaming%20%C4%91%C3%A3%20%C4%91%E1%BB%95%20data%20v%C3%A0o%20S3.jpg)
 
 ---
 
-## 2.5 Create IAM Role for Glue ETL Jobs
+## 2.5 Tạo IAM Role cho Glue ETL Jobs
 
-Create an IAM role that Glue ETL jobs will use to read from and write to S3.
+Tạo IAM role mà các Glue ETL job sẽ sử dụng để đọc và ghi vào S3.
 
 **AWS Console → IAM → Roles → Create role**
 
-| Field | Value |
-|-------|-------|
+| Trường | Giá trị |
+|--------|---------|
 | Trusted entity type | AWS service |
 | Service | Glue |
 | Use case | Glue |
 
-**Add permissions - attach these policies:**
-- `AWSGlueServiceRole` (managed) - allows Glue to write CloudWatch logs
-- `AmazonS3FullAccess` - for workshop simplicity
-- `AmazonAthenaFullAccess` - for Glue → Catalog registration in `silver_to_gold_job`
+**Thêm permissions - gán các policy sau:**
+- `AWSGlueServiceRole` (managed) - cho phép Glue ghi CloudWatch logs
+- `AmazonS3FullAccess` - để đơn giản cho workshop
+- `AmazonAthenaFullAccess` - để Glue → đăng ký Catalog trong `silver_to_gold_job`
 
-**Role name:** `AWSGlueServiceRole-lakehouse`
+**Tên role:** `AWSGlueServiceRole-lakehouse`
 
-> ⚠️ **Least-privilege note:** In production, replace broad managed policies with a custom policy:
+> ⚠️ **Lưu ý quyền hạn tối thiểu:** Trong production, thay các policy broad bằng custom policy:
 
 ```json
 {
@@ -211,58 +211,58 @@ Create an IAM role that Glue ETL jobs will use to read from and write to S3.
 
 ---
 
-## 2.6 Upload ETL Scripts to S3
+## 2.6 Tải Scripts ETL lên S3
 
-Upload the three Glue ETL scripts so Glue can access them:
+Tải ba Glue ETL scripts lên S3 để Glue có thể truy cập:
 
 ```bash
-# Upload all scripts
+# Tải tất cả scripts
 aws s3 cp source_code/raw_to_bronze_job.py    s3://customer-behavior-lakehouse1/scripts/raw_to_bronze_job.py
 aws s3 cp source_code/bronze_to_silver_job.py s3://customer-behavior-lakehouse1/scripts/bronze_to_silver_job.py
 aws s3 cp source_code/silver_to_gold_job.py   s3://customer-behavior-lakehouse1/scripts/silver_to_gold_job.py
 
-# Verify
+# Xác minh
 aws s3 ls s3://customer-behavior-lakehouse1/scripts/
 ```
 
 ---
 
-## 2.7 Validation
+## 2.7 Kiểm tra & Xác nhận
 
 ```bash
-# List all prefixes to confirm structure
-echo "=== S3 Bucket Structure ==="
+# Liệt kê tất cả prefix để xác nhận cấu trúc
+echo "=== Cấu trúc S3 Bucket ==="
 aws s3 ls s3://customer-behavior-lakehouse1/
 
-# Check raw/ contains all 6 CSV files
-echo "=== Raw CSV files ==="
+# Kiểm tra raw/ chứa đủ 6 file CSV
+echo "=== File CSV Raw ==="
 aws s3 ls s3://customer-behavior-lakehouse1/raw/
 
-# Check bucket versioning
+# Kiểm tra versioning
 echo "=== Versioning ==="
 aws s3api get-bucket-versioning --bucket customer-behavior-lakehouse1
 
-# Check encryption
-echo "=== Encryption ==="
+# Kiểm tra mã hóa
+echo "=== Mã hóa ==="
 aws s3api get-bucket-encryption --bucket customer-behavior-lakehouse1 \
     --query "ServerSideEncryptionConfiguration.Rules[0].ApplyServerSideEncryptionByDefault.SSEAlgorithm"
 ```
 
-**Expected output:**
-- 7 prefixes visible: `raw/`, `bronze/`, `silver/`, `gold/`, `athena-results/`, `scripts/`, `tmp/`
-- 6 CSV files in `raw/`
+**Kết quả mong đợi:**
+- 7 prefix hiển thị: `raw/`, `bronze/`, `silver/`, `gold/`, `athena-results/`, `scripts/`, `tmp/`
+- 6 file CSV trong `raw/`
 - Versioning: `{ "Status": "Enabled" }`
-- Encryption: `"AES256"`
+- Mã hóa: `"AES256"`
 
 ---
 
-## Troubleshooting
+## Xử lý sự cố
 
-| Issue | Cause | Fix |
-|-------|-------|-----|
-| `BucketAlreadyExists` | Bucket name taken globally | Use unique name: add account ID suffix |
-| `AccessDenied` on upload | Missing S3 write permissions | Attach `AmazonS3FullAccess` to your IAM user |
-| Firehose data not appearing in S3 | Buffer interval not elapsed | Wait 60–90 seconds |
-| Script upload fails | Missing `scripts/` prefix | Run `aws s3api put-object --bucket ... --key scripts/` first |
+| Vấn đề | Nguyên nhân | Cách khắc phục |
+|--------|-------------|----------------|
+| `BucketAlreadyExists` | Tên bucket đã được dùng toàn cầu | Dùng tên duy nhất: thêm Account ID |
+| `AccessDenied` khi tải lên | Thiếu quyền ghi S3 | Gán `AmazonS3FullAccess` cho IAM user |
+| Dữ liệu Firehose không hiện trong S3 | Buffer interval chưa hết | Đợi 60–90 giây |
+| Tải script thất bại | Thiếu prefix `scripts/` | Chạy `aws s3api put-object --bucket ... --key scripts/` trước |
 
-✅ **Step 2 complete** - Proceed to [Step 3: AWS Glue ETL Jobs](../5.4.3-Glue/)
+✅ **Bước 2 hoàn thành** - Tiến hành đến [Bước 3: AWS Glue ETL Jobs](../5.4.3-Glue/)

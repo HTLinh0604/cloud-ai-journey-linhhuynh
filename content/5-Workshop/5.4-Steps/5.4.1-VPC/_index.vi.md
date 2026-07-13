@@ -1,32 +1,32 @@
 ---
-title: "Step 1: VPC & Networking"
+title: "Bước 1: VPC & Networking"
 date: 2024-01-01
 weight: 1
 chapter: false
 pre: " <b> 5.4.1 </b> "
 ---
 
-# Step 1: VPC & Networking Setup
+# Bước 1: Thiết lập VPC & Networking
 
-In this step, you will create the network foundation for the workshop: a VPC with a public subnet, Internet Gateway, Route Table, and Security Group to host the EC2 Streamlit dashboard.
+Trong bước này, bạn sẽ tạo nền tảng mạng cho workshop: một VPC với public subnet, Internet Gateway, Route Table và Security Group để lưu trữ EC2 Streamlit dashboard.
 
-**Estimated time:** 15–20 minutes
+**Thời gian ước tính:** 15–20 phút
 
 ---
 
-## Prerequisites
+## Điều kiện tiên quyết
 
-- AWS account with `AmazonEC2FullAccess` permission
+- Tài khoản AWS với quyền `AmazonEC2FullAccess`
 - AWS Region: `us-east-1`
 
 ---
 
-## 1.1 Create a VPC
+## 1.1 Tạo VPC
 
 **AWS Console → VPC → Your VPCs → Create VPC**
 
-| Field | Value |
-|-------|-------|
+| Trường | Giá trị |
+|--------|---------|
 | Name tag | `lakehouse-vpc` |
 | IPv4 CIDR block | `10.0.0.0/16` |
 | IPv6 CIDR block | No IPv6 CIDR block |
@@ -34,7 +34,7 @@ In this step, you will create the network foundation for the workshop: a VPC wit
 
 Click **Create VPC**.
 
-**CLI alternative:**
+**Tùy chọn CLI:**
 ```bash
 aws ec2 create-vpc \
     --cidr-block 10.0.0.0/16 \
@@ -43,36 +43,36 @@ aws ec2 create-vpc \
     --output text
 ```
 
-![VPC created - Your VPCs list showing lakehouse-vpc](/result/VPC/Your%20VPCs..jpg)
+![VPC đã tạo - Danh sách Your VPCs hiển thị lakehouse-vpc](/result/VPC/Your%20VPCs..jpg)
 
 ---
 
-## 1.2 Create a Public Subnet
+## 1.2 Tạo Public Subnet
 
 **VPC Console → Subnets → Create Subnet**
 
-| Field | Value |
-|-------|-------|
-| VPC | Select `lakehouse-vpc` |
+| Trường | Giá trị |
+|--------|---------|
+| VPC | Chọn `lakehouse-vpc` |
 | Subnet name | `lakehouse-public-subnet` |
 | Availability Zone | `us-east-1a` |
 | IPv4 CIDR block | `10.0.1.0/24` |
 
 Click **Create Subnet**.
 
-After creating, select the subnet → **Actions → Edit subnet settings**:
-- ✅ Enable **Auto-assign public IPv4 address**
+Sau khi tạo, chọn subnet → **Actions → Edit subnet settings**:
+- ✅ Bật **Auto-assign public IPv4 address**
 
 Click **Save**.
 
-**CLI alternative:**
+**Tùy chọn CLI:**
 ```bash
-# Get VPC ID first
+# Lấy VPC ID trước
 VPC_ID=$(aws ec2 describe-vpcs \
     --filters "Name=tag:Name,Values=lakehouse-vpc" \
     --query "Vpcs[0].VpcId" --output text)
 
-# Create subnet
+# Tạo subnet
 aws ec2 create-subnet \
     --vpc-id $VPC_ID \
     --cidr-block 10.0.1.0/24 \
@@ -80,72 +80,72 @@ aws ec2 create-subnet \
     --tag-specifications 'ResourceType=subnet,Tags=[{Key=Name,Value=lakehouse-public-subnet}]'
 ```
 
-![Subnet created inside lakehouse-vpc](/result/VPC/Subnets.jpg)
+![Subnet đã tạo trong lakehouse-vpc](/result/VPC/Subnets.jpg)
 
 ---
 
-## 1.3 Create and Attach an Internet Gateway
+## 1.3 Tạo và Gắn Internet Gateway
 
 **VPC Console → Internet Gateways → Create Internet Gateway**
 
-| Field | Value |
-|-------|-------|
+| Trường | Giá trị |
+|--------|---------|
 | Name tag | `lakehouse-igw` |
 
 Click **Create Internet Gateway**.
 
-Then **Actions → Attach to VPC** → select `lakehouse-vpc` → **Attach internet gateway**.
+Sau đó **Actions → Attach to VPC** → chọn `lakehouse-vpc` → **Attach internet gateway**.
 
-**CLI alternative:**
+**Tùy chọn CLI:**
 ```bash
-# Create IGW
+# Tạo IGW
 IGW_ID=$(aws ec2 create-internet-gateway \
     --tag-specifications 'ResourceType=internet-gateway,Tags=[{Key=Name,Value=lakehouse-igw}]' \
     --query "InternetGateway.InternetGatewayId" --output text)
 
-# Attach to VPC
+# Gắn vào VPC
 aws ec2 attach-internet-gateway \
     --internet-gateway-id $IGW_ID \
     --vpc-id $VPC_ID
 ```
 
-![Internet Gateway attached to lakehouse-vpc](/result/VPC/Internet%20Gateway.jpg)
+![Internet Gateway gắn vào lakehouse-vpc](/result/VPC/Internet%20Gateway.jpg)
 
 ---
 
-## 1.4 Configure Route Table
+## 1.4 Cấu hình Route Table
 
 **VPC Console → Route Tables**
 
-Select the Route Table associated with `lakehouse-vpc` (or create a new one named `lakehouse-rt`).
+Chọn Route Table liên kết với `lakehouse-vpc` (hoặc tạo mới đặt tên `lakehouse-rt`).
 
-**Routes tab → Edit routes → Add route:**
+**Tab Routes → Edit routes → Add route:**
 
-| Destination | Target |
-|-------------|--------|
+| Đích đến | Mục tiêu |
+|----------|----------|
 | `0.0.0.0/0` | `lakehouse-igw` (Internet Gateway) |
 
 Click **Save changes**.
 
-**Subnet associations tab → Edit subnet associations:**
-- Select `lakehouse-public-subnet`
+**Tab Subnet associations → Edit subnet associations:**
+- Chọn `lakehouse-public-subnet`
 
 Click **Save associations**.
 
-**CLI alternative:**
+**Tùy chọn CLI:**
 ```bash
-# Get Route Table ID (main route table of VPC)
+# Lấy Route Table ID (route table chính của VPC)
 RT_ID=$(aws ec2 describe-route-tables \
     --filters "Name=vpc-id,Values=$VPC_ID" "Name=association.main,Values=true" \
     --query "RouteTables[0].RouteTableId" --output text)
 
-# Add internet route
+# Thêm route internet
 aws ec2 create-route \
     --route-table-id $RT_ID \
     --destination-cidr-block 0.0.0.0/0 \
     --gateway-id $IGW_ID
 
-# Associate subnet
+# Liên kết subnet
 SUBNET_ID=$(aws ec2 describe-subnets \
     --filters "Name=tag:Name,Values=lakehouse-public-subnet" \
     --query "Subnets[0].SubnetId" --output text)
@@ -155,34 +155,34 @@ aws ec2 associate-route-table \
     --subnet-id $SUBNET_ID
 ```
 
-![Route Tables - 0.0.0.0/0 route pointing to Internet Gateway](/result/VPC/Route%20Tables.jpg)
+![Route Tables - Route 0.0.0.0/0 trỏ tới Internet Gateway](/result/VPC/Route%20Tables.jpg)
 
 ---
 
-## 1.5 Create a Security Group for EC2
+## 1.5 Tạo Security Group cho EC2
 
 **VPC Console → Security Groups → Create Security Group**
 
-| Field | Value |
-|-------|-------|
+| Trường | Giá trị |
+|--------|---------|
 | Security group name | `lakehouse-ec2-sg` |
 | Description | `Allow SSH and Streamlit access` |
 | VPC | `lakehouse-vpc` |
 
-**Inbound rules - Add rules:**
+**Inbound rules - Thêm rules:**
 
-| Type | Protocol | Port | Source | Description |
-|------|----------|------|--------|-------------|
-| SSH | TCP | 22 | `My IP` | SSH management access |
+| Loại | Protocol | Port | Nguồn | Mô tả |
+|------|----------|------|-------|-------|
+| SSH | TCP | 22 | `My IP` | Quản lý SSH |
 | Custom TCP | TCP | 8501 | `0.0.0.0/0` | Streamlit dashboard |
 
-**Outbound rules:** Leave default (all traffic allowed).
+**Outbound rules:** Giữ mặc định (cho phép tất cả traffic).
 
 Click **Create security group**.
 
-> ⚠️ **Security note:** In production, restrict port 8501 to your company's IP range rather than `0.0.0.0/0`. For this workshop, allowing all IPs is acceptable for a temporary test environment.
+> ⚠️ **Lưu ý bảo mật:** Trong production, hãy giới hạn port 8501 cho dải IP của công ty thay vì `0.0.0.0/0`. Cho workshop này, cho phép tất cả IP là chấp nhận được cho môi trường test tạm thời.
 
-**CLI alternative:**
+**Tùy chọn CLI:**
 ```bash
 SG_ID=$(aws ec2 create-security-group \
     --group-name lakehouse-ec2-sg \
@@ -190,14 +190,14 @@ SG_ID=$(aws ec2 create-security-group \
     --vpc-id $VPC_ID \
     --query "GroupId" --output text)
 
-# Add SSH rule (replace YOUR_IP)
+# Thêm rule SSH (thay YOUR_IP)
 aws ec2 authorize-security-group-ingress \
     --group-id $SG_ID \
     --protocol tcp \
     --port 22 \
     --cidr $(curl -s https://checkip.amazonaws.com)/32
 
-# Add Streamlit rule
+# Thêm rule Streamlit
 aws ec2 authorize-security-group-ingress \
     --group-id $SG_ID \
     --protocol tcp \
@@ -205,45 +205,45 @@ aws ec2 authorize-security-group-ingress \
     --cidr 0.0.0.0/0
 ```
 
-![Security Group - inbound rules showing port 22 and 8501](/result/VPC/Security%20Group.jpg)
+![Security Group - Inbound rules hiển thị port 22 và 8501](/result/VPC/Security%20Group.jpg)
 
 ---
 
-## 1.6 Validation
+## 1.6 Kiểm tra & Xác nhận
 
-Verify your networking setup:
+Xác minh cài đặt mạng của bạn:
 
 ```bash
-# Verify VPC exists and is available
+# Xác minh VPC tồn tại và đang hoạt động
 aws ec2 describe-vpcs \
     --filters "Name=tag:Name,Values=lakehouse-vpc" \
     --query "Vpcs[0].{VpcId:VpcId,CIDR:CidrBlock,State:State}"
 
-# Verify subnet
+# Xác minh subnet
 aws ec2 describe-subnets \
     --filters "Name=tag:Name,Values=lakehouse-public-subnet" \
     --query "Subnets[0].{SubnetId:SubnetId,CIDR:CidrBlock,AZ:AvailabilityZone,MapPublicIp:MapPublicIpOnLaunch}"
 
-# Verify Internet Gateway is attached
+# Xác minh Internet Gateway đã gắn
 aws ec2 describe-internet-gateways \
     --filters "Name=tag:Name,Values=lakehouse-igw" \
     --query "InternetGateways[0].{IGWId:InternetGatewayId,Attachments:Attachments}"
 ```
 
-**Expected outputs:**
+**Kết quả mong đợi:**
 - VPC: `State: available`
 - Subnet: `MapPublicIp: true`
 - IGW: `Attachments[0].State: available`
 
 ---
 
-## Troubleshooting
+## Xử lý sự cố
 
-| Issue | Cause | Fix |
-|-------|-------|-----|
-| Cannot SSH to EC2 (created in Step 5) | Security Group missing port 22 rule | Add inbound SSH rule from your IP |
-| Streamlit not accessible on port 8501 | Security Group missing port 8501 | Add inbound Custom TCP rule for port 8501 |
-| EC2 has no internet access | Route Table missing 0.0.0.0/0 → IGW route | Add route and associate with subnet |
-| EC2 has private IP only | Auto-assign public IP disabled | Edit subnet settings → enable auto-assign |
+| Vấn đề | Nguyên nhân | Cách khắc phục |
+|--------|-------------|----------------|
+| Không SSH được vào EC2 (tạo ở Bước 5) | Security Group thiếu rule port 22 | Thêm inbound SSH rule từ IP của bạn |
+| Streamlit không truy cập được trên port 8501 | Security Group thiếu port 8501 | Thêm inbound Custom TCP rule cho port 8501 |
+| EC2 không có internet | Route Table thiếu route 0.0.0.0/0 → IGW | Thêm route và liên kết với subnet |
+| EC2 chỉ có private IP | Auto-assign public IP bị tắt | Chỉnh sửa subnet settings → bật auto-assign |
 
-✅ **Step 1 complete** - Proceed to [Step 2: S3 Buckets & Data Upload](../5.4.2-S3/)
+✅ **Bước 1 hoàn thành** - Tiến hành đến [Bước 2: S3 Buckets & Data Upload](../5.4.2-S3/)

@@ -1,51 +1,51 @@
 ---
-title: "Step 6: Monitoring"
+title: "Bước 6: Giám sát"
 date: 2024-01-01
 weight: 6
 chapter: false
 pre: " <b> 5.4.6 </b> "
 ---
 
-# Step 6: Monitoring with CloudWatch
+# Bước 6: Giám sát với CloudWatch
 
-In this step, you will set up monitoring and alerting for the entire data pipeline using Amazon CloudWatch - covering Glue ETL job health, Athena query metrics, and EC2 instance health.
+Trong bước này, bạn sẽ thiết lập giám sát và cảnh báo cho toàn bộ data pipeline sử dụng Amazon CloudWatch - bao gồm tình trạng Glue ETL job, metric truy vấn Athena và tình trạng EC2 instance.
 
-**Estimated time:** 20–25 minutes
-
----
-
-## Prerequisites
-
-- Steps 3–5 complete (Glue jobs, Athena, and EC2 dashboard all running)
-- `CloudWatchFullAccess` IAM permission
+**Thời gian ước tính:** 20–25 phút
 
 ---
 
-## 6.1 View Glue ETL Job Logs
+## Điều kiện tiên quyết
 
-Every Glue ETL job run automatically generates logs in CloudWatch Logs.
+- Các Bước 3–5 hoàn thành (Glue jobs, Athena và EC2 dashboard đều đang chạy)
+- Quyền IAM `CloudWatchFullAccess`
 
-**AWS Console → AWS Glue → ETL Jobs → [job name] → Runs tab**
+---
 
-Click any run → **View CloudWatch logs** link.
+## 6.1 Xem Log Glue ETL Job
 
-Or navigate directly:
+Mỗi lần chạy Glue ETL job tự động tạo log trong CloudWatch Logs.
+
+**AWS Console → AWS Glue → ETL Jobs → [tên job] → Tab Runs**
+
+Click bất kỳ run → Link **View CloudWatch logs**.
+
+Hoặc điều hướng trực tiếp:
 **CloudWatch Console → Log groups → `/aws-glue/jobs/output`**
 
-**View logs via CLI:**
+**Xem log qua CLI:**
 ```bash
-# Get the log group details for a specific run
+# Lấy chi tiết log group cho một run cụ thể
 aws glue get-job-runs --job-name silver-to-gold-job \
     --query "JobRuns[0].{Status:JobRunState,LogGroup:LogGroupName,Duration:ExecutionTime}"
 
-# Tail job output logs (live follow)
+# Theo dõi output logs (live follow)
 aws logs tail /aws-glue/jobs/output --follow
 
-# Get last 20 events from error log group
+# Lấy 20 events gần nhất từ error log group
 aws logs tail /aws-glue/jobs/error --follow
 ```
 
-**Key log messages to verify success:**
+**Các thông điệp log chính để xác minh thành công:**
 
 ```
 Reading Silver: s3://customer-behavior-lakehouse1/silver/events/
@@ -58,41 +58,41 @@ Silver to Gold job completed and Glue Catalog tables registered.
 
 ---
 
-## 6.2 Set Up CloudWatch Alarms for Glue Jobs
+## 6.2 Thiết lập CloudWatch Alarm cho Glue Jobs
 
 **AWS Console → CloudWatch → Alarms → Create alarm**
 
-### Alarm 1: Glue Job Failure Alert
+### Alarm 1: Cảnh báo Glue Job Thất bại
 
-| Field | Value |
-|-------|-------|
+| Trường | Giá trị |
+|--------|---------|
 | Metric namespace | Glue |
 | Metric name | `glue.driver.aggregate.numFailedTasks` |
 | Statistic | Sum |
-| Period | 5 minutes |
+| Period | 5 phút |
 | Threshold type | Static |
 | Condition | `> 0` |
 | Alarm name | `GlueJobFailure-Alert` |
-| Notification | Create SNS topic → enter your email |
+| Notification | Tạo SNS topic → nhập email của bạn |
 
 Click **Create alarm**.
 
-**CLI alternative:**
+**Tùy chọn CLI:**
 ```bash
-# Step 1: Create SNS topic for alerts
+# Bước 1: Tạo SNS topic cho cảnh báo
 SNS_ARN=$(aws sns create-topic --name lakehouse-alerts --query "TopicArn" --output text)
 echo "SNS ARN: $SNS_ARN"
 
-# Step 2: Subscribe your email (check inbox for confirmation)
+# Bước 2: Đăng ký email của bạn (kiểm tra hộp thư để xác nhận)
 aws sns subscribe \
     --topic-arn $SNS_ARN \
     --protocol email \
     --notification-endpoint your-email@example.com
 
-# Step 3: Create Glue failure alarm
+# Bước 3: Tạo alarm thất bại Glue
 aws cloudwatch put-metric-alarm \
     --alarm-name "GlueJobFailure-Alert" \
-    --alarm-description "Alert when any Glue ETL job has failed tasks" \
+    --alarm-description "Cảnh báo khi Glue ETL job có task thất bại" \
     --metric-name "glue.driver.aggregate.numFailedTasks" \
     --namespace "Glue" \
     --statistic Sum \
@@ -105,16 +105,16 @@ aws cloudwatch put-metric-alarm \
 
 ---
 
-## 6.3 Set Up CloudWatch Alarm for Athena
+## 6.3 Thiết lập CloudWatch Alarm cho Athena
 
-### Alarm 2: Athena Data Scan Cost Alert
+### Alarm 2: Cảnh báo Chi phí Quét Dữ liệu Athena
 
-Monitors total data scanned per day - alerts if approaching cost limits.
+Theo dõi tổng dữ liệu được quét mỗi ngày - cảnh báo khi tiệm cận giới hạn chi phí.
 
 ```bash
 aws cloudwatch put-metric-alarm \
     --alarm-name "Athena-DataScan-Alert" \
-    --alarm-description "Alert when Athena scans more than 5 GB in a day" \
+    --alarm-description "Cảnh báo khi Athena quét hơn 5 GB trong một ngày" \
     --metric-name "DataScannedInBytes" \
     --namespace "AWS/Athena" \
     --dimensions Name=WorkGroup,Value=lakehouse-wg \
@@ -126,30 +126,30 @@ aws cloudwatch put-metric-alarm \
     --alarm-actions $SNS_ARN
 ```
 
-> 💡 **FinOps note:** 5 GB threshold = $0.025 alert trigger. At Parquet efficiency, this threshold should rarely be hit during normal usage.
+> 💡 **FinOps note:** Ngưỡng 5 GB = trigger cảnh báo $0.025. Với hiệu quả Parquet, ngưỡng này hiếm khi bị vượt trong quá trình sử dụng bình thường.
 
 ---
 
-## 6.4 Monitor EC2 Instance Health
+## 6.4 Giám sát Tình trạng EC2 Instance
 
-### Alarm 3: EC2 CPU High Alert
+### Alarm 3: Cảnh báo CPU EC2 Cao
 
 **CloudWatch Console → All metrics → EC2 → Per-Instance Metrics**
 
-Select `lakehouse-dashboard` instance and view:
-- **CPUUtilization** - should be low (~5–20%) at idle
-- **NetworkIn/NetworkOut** - traffic from users accessing the dashboard
+Chọn instance `lakehouse-dashboard` và xem:
+- **CPUUtilization** - nên thấp (~5–20%) khi nhàn rỗi
+- **NetworkIn/NetworkOut** - traffic từ người dùng truy cập dashboard
 
 ```bash
-# Get your EC2 instance ID
+# Lấy EC2 Instance ID
 INSTANCE_ID=$(aws ec2 describe-instances \
     --filters "Name=tag:Name,Values=lakehouse-dashboard" \
     --query "Reservations[0].Instances[0].InstanceId" --output text)
 
-# Create CPU high alarm
+# Tạo alarm CPU cao
 aws cloudwatch put-metric-alarm \
     --alarm-name "EC2-CPU-High-Alert" \
-    --alarm-description "EC2 CPU above 80% for 5 consecutive minutes" \
+    --alarm-description "EC2 CPU trên 80% trong 5 phút liên tiếp" \
     --metric-name "CPUUtilization" \
     --namespace "AWS/EC2" \
     --dimensions Name=InstanceId,Value=$INSTANCE_ID \
@@ -163,26 +163,26 @@ aws cloudwatch put-metric-alarm \
 
 ---
 
-## 6.5 Create a CloudWatch Dashboard
+## 6.5 Tạo CloudWatch Dashboard
 
-Create a unified dashboard to view all pipeline health metrics in one place.
+Tạo dashboard thống nhất để xem tất cả metric tình trạng pipeline ở một nơi.
 
 **CloudWatch Console → Dashboards → Create dashboard**
 
-| Field | Value |
-|-------|-------|
+| Trường | Giá trị |
+|--------|---------|
 | Dashboard name | `lakehouse-pipeline-health` |
 
-**Add widgets (manually or via JSON below):**
+**Thêm widgets:**
 
-| Widget | Metric | Chart Type |
+| Widget | Metric | Loại biểu đồ |
 |--------|--------|-----------| 
 | Glue Completed Tasks | `Glue / glue.driver.aggregate.numCompletedTasks` | Line |
 | Glue Failed Tasks | `Glue / glue.driver.aggregate.numFailedTasks` | Line |
 | Athena Data Scanned | `AWS/Athena / DataScannedInBytes` (Workgroup=lakehouse-wg) | Bar |
-| EC2 CPU Utilization | `AWS/EC2 / CPUUtilization` (InstanceId=your-id) | Line |
+| EC2 CPU Utilization | `AWS/EC2 / CPUUtilization` (InstanceId=của bạn) | Line |
 
-**CLI to create dashboard:**
+**CLI để tạo dashboard:**
 ```bash
 aws cloudwatch put-dashboard \
     --dashboard-name "lakehouse-pipeline-health" \
@@ -238,14 +238,14 @@ aws cloudwatch put-dashboard \
 
 ---
 
-## 6.6 View Lambda Logs (Ingestion Path)
+## 6.6 Xem Lambda Logs (Đường Tiếp nhận)
 
-If you configured Lambda for Firehose transformation or batch DB extraction:
+Nếu bạn đã cấu hình Lambda cho chuyển đổi Firehose hoặc trích xuất DB batch:
 
-**CloudWatch Console → Log groups → `/aws/lambda/<function-name>`**
+**CloudWatch Console → Log groups → `/aws/lambda/<tên-function>`**
 
 ```bash
-# List log streams
+# Liệt kê log streams
 aws logs describe-log-streams \
     --log-group-name /aws/lambda/firehose-transform \
     --order-by LastEventTime \
@@ -253,7 +253,7 @@ aws logs describe-log-streams \
     --query "logStreams[0].logStreamName" \
     --output text
 
-# Get recent log events
+# Lấy log events gần nhất
 LOG_STREAM=$(aws logs describe-log-streams \
     --log-group-name /aws/lambda/firehose-transform \
     --order-by LastEventTime --descending \
@@ -269,59 +269,59 @@ aws logs get-log-events \
 
 ---
 
-## 6.7 Summary: Alarms Configured
+## 6.7 Tóm tắt: Các Alarm đã Cấu hình
 
-| Alarm Name | Metric | Threshold | Action |
-|------------|--------|-----------|--------|
-| `GlueJobFailure-Alert` | `numFailedTasks` | > 0 | SNS email |
-| `Athena-DataScan-Alert` | `DataScannedInBytes` | > 5 GB/day | SNS email |
-| `EC2-CPU-High-Alert` | `CPUUtilization` | > 80% for 5 min | SNS email |
+| Tên Alarm | Metric | Ngưỡng | Hành động |
+|-----------|--------|--------|-----------|
+| `GlueJobFailure-Alert` | `numFailedTasks` | > 0 | Email SNS |
+| `Athena-DataScan-Alert` | `DataScannedInBytes` | > 5 GB/ngày | Email SNS |
+| `EC2-CPU-High-Alert` | `CPUUtilization` | > 80% trong 5 phút | Email SNS |
 
 ---
 
-## 6.8 Test Alerting
+## 6.8 Kiểm tra Cảnh báo
 
-Trigger a test alarm to verify SNS notifications are working:
+Kích hoạt alarm test để xác minh thông báo SNS hoạt động:
 
 ```bash
-# Force alarm into ALARM state (test only)
+# Ép alarm vào trạng thái ALARM (chỉ để test)
 aws cloudwatch set-alarm-state \
     --alarm-name "GlueJobFailure-Alert" \
     --state-value ALARM \
-    --state-reason "Manual test trigger from workshop"
+    --state-reason "Kích hoạt test thủ công từ workshop"
 
-# Check your email inbox for the SNS notification (arrives in ~1 minute)
+# Kiểm tra hộp thư email để nhận thông báo SNS (đến trong ~1 phút)
 
-# Reset back to OK after testing
+# Đặt lại về OK sau khi test
 aws cloudwatch set-alarm-state \
     --alarm-name "GlueJobFailure-Alert" \
     --state-value OK \
-    --state-reason "Test complete - resetting alarm"
+    --state-reason "Test hoàn thành - đặt lại alarm"
 ```
 
 ---
 
-## 6.9 Check All Alarms Status
+## 6.9 Kiểm tra Trạng thái Tất cả Alarm
 
 ```bash
-# View all lakehouse alarms and their current state
+# Xem tất cả lakehouse alarms và trạng thái hiện tại
 aws cloudwatch describe-alarms \
     --alarm-names "GlueJobFailure-Alert" "Athena-DataScan-Alert" "EC2-CPU-High-Alert" \
     --query "MetricAlarms[*].{Name:AlarmName,State:StateValue,Reason:StateReason}" \
     --output table
 ```
 
-**Expected states:** All alarms should show `OK` state during normal pipeline operation.
+**Trạng thái mong đợi:** Tất cả alarm nên hiển thị trạng thái `OK` trong quá trình pipeline hoạt động bình thường.
 
 ---
 
-## Troubleshooting
+## Xử lý sự cố
 
-| Issue | Cause | Fix |
-|-------|-------|-----|
-| SNS email not received | Email subscription not confirmed | Check inbox for AWS confirmation email and click link |
-| Alarm stays in `INSUFFICIENT_DATA` | No metric data yet | Run a Glue job or Athena query to generate metrics |
-| Glue logs not appearing | Log group not yet created | Run at least one Glue job - logs appear after first run |
-| Dashboard widgets show "No data" | Metric dimensions not matching | Verify instance ID and workgroup name in widget config |
+| Vấn đề | Nguyên nhân | Cách khắc phục |
+|--------|-------------|----------------|
+| Không nhận được email SNS | Chưa xác nhận subscription | Kiểm tra hộp thư để tìm email xác nhận AWS và click link |
+| Alarm ở trạng thái `INSUFFICIENT_DATA` | Chưa có dữ liệu metric | Chạy một Glue job hoặc Athena query để tạo metric |
+| Log Glue không xuất hiện | Log group chưa được tạo | Chạy ít nhất một Glue job - log xuất hiện sau lần chạy đầu |
+| Dashboard widgets hiển thị "No data" | Dimension metric không khớp | Xác minh Instance ID và tên workgroup trong widget config |
 
-✅ **Step 6 complete** - Your pipeline is fully monitored! Proceed to [Clean-up](../../5.5-Cleanup/) when you have finished exploring.
+✅ **Bước 6 hoàn thành** - Pipeline của bạn được giám sát đầy đủ! Tiến hành đến [Dọn dẹp](../../5.5-Cleanup/) khi bạn đã hoàn thành khám phá.
