@@ -158,11 +158,11 @@ Không cần kinh nghiệm trước với Glue, Athena, hoặc Streamlit - works
 
 Trước khi tiến hành Bước 1, hãy xác nhận tất cả các mục dưới đây:
 
-- [ ] Tài khoản AWS đang hoạt động với billing được kích hoạt
-- [ ] IAM user/role có các quyền cần thiết liệt kê ở trên
-- [ ] AWS CLI v2 đã cài đặt và cấu hình (`aws sts get-caller-identity` trả về Account ID của bạn)
-- [ ] Python 3.9+ đã cài đặt
-- [ ] File CSV dữ liệu mẫu đã sẵn sàng (hoặc được tạo bằng script ở trên)
-- [ ] AWS Region đã đặt thành `us-east-1`
+-  Tài khoản AWS đang hoạt động với billing được kích hoạt
+-  IAM user/role có các quyền cần thiết liệt kê ở trên
+-  AWS CLI v2 đã cài đặt và cấu hình (`aws sts get-caller-identity` trả về Account ID của bạn)
+-  Python 3.9+ đã cài đặt
+-  File CSV dữ liệu mẫu đã sẵn sàng (hoặc được tạo bằng script ở trên)
+-  AWS Region đã đặt thành `us-east-1`
 
 ✅ **Đã kiểm tra hết?** Tiến hành đến [Mô tả Kiến trúc](../5.3-Architecture/)

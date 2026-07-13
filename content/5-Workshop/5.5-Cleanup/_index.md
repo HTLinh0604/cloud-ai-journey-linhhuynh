@@ -341,28 +341,28 @@ echo "========================================="
 
 Complete this checklist to confirm everything is deleted:
 
-- [ ] EC2 instance `lakehouse-dashboard` terminated
-- [ ] Elastic IP released
-- [ ] `raw-to-bronze-job` deleted
-- [ ] `bronze-to-silver-job` deleted
-- [ ] `silver-to-gold-job` deleted
-- [ ] 7 Glue Catalog tables deleted
-- [ ] Glue database `customer_behavior_catalog_db` deleted
-- [ ] S3 bucket `customer-behavior-lakehouse1` emptied and deleted
-- [ ] CloudWatch alarm `GlueJobFailure-Alert` deleted
-- [ ] CloudWatch alarm `Athena-DataScan-Alert` deleted
-- [ ] CloudWatch alarm `EC2-CPU-High-Alert` deleted
-- [ ] CloudWatch dashboard `lakehouse-pipeline-health` deleted
-- [ ] CloudWatch log groups deleted
-- [ ] Security Group `lakehouse-ec2-sg` deleted
-- [ ] Route Table deleted (or cleaned up)
-- [ ] Internet Gateway `lakehouse-igw` deleted
-- [ ] Subnet `lakehouse-public-subnet` deleted
-- [ ] VPC `lakehouse-vpc` deleted
-- [ ] IAM role `AWSGlueServiceRole-lakehouse` deleted
-- [ ] IAM role `lakehouse-ec2-role` deleted
-- [ ] SNS topic `lakehouse-alerts` deleted
-- [ ] Firehose stream `lakehouse-event-stream` deleted (if created)
+-  EC2 instance `lakehouse-dashboard` terminated
+-  Elastic IP released
+-  `raw-to-bronze-job` deleted
+-  `bronze-to-silver-job` deleted
+-  `silver-to-gold-job` deleted
+-  7 Glue Catalog tables deleted
+-  Glue database `customer_behavior_catalog_db` deleted
+-  S3 bucket `customer-behavior-lakehouse1` emptied and deleted
+-  CloudWatch alarm `GlueJobFailure-Alert` deleted
+-  CloudWatch alarm `Athena-DataScan-Alert` deleted
+-  CloudWatch alarm `EC2-CPU-High-Alert` deleted
+-  CloudWatch dashboard `lakehouse-pipeline-health` deleted
+-  CloudWatch log groups deleted
+-  Security Group `lakehouse-ec2-sg` deleted
+-  Route Table deleted (or cleaned up)
+-  Internet Gateway `lakehouse-igw` deleted
+-  Subnet `lakehouse-public-subnet` deleted
+-  VPC `lakehouse-vpc` deleted
+-  IAM role `AWSGlueServiceRole-lakehouse` deleted
+-  IAM role `lakehouse-ec2-role` deleted
+-  SNS topic `lakehouse-alerts` deleted
+-  Firehose stream `lakehouse-event-stream` deleted (if created)
 
 ✅ **Workshop complete!** All resources cleaned up. No further charges will be incurred.
 

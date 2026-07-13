@@ -334,27 +334,27 @@ echo "========================================="
 
 Hoàn thành danh sách kiểm tra này để xác nhận mọi thứ đã xóa:
 
-- [ ] EC2 instance `lakehouse-dashboard` đã terminate
-- [ ] Elastic IP đã giải phóng
-- [ ] `raw-to-bronze-job` đã xóa
-- [ ] `bronze-to-silver-job` đã xóa
-- [ ] `silver-to-gold-job` đã xóa
-- [ ] 7 bảng Glue Catalog đã xóa
-- [ ] Database Glue `customer_behavior_catalog_db` đã xóa
-- [ ] S3 bucket `customer-behavior-lakehouse1` đã làm trống và xóa
-- [ ] CloudWatch alarm `GlueJobFailure-Alert` đã xóa
-- [ ] CloudWatch alarm `Athena-DataScan-Alert` đã xóa
-- [ ] CloudWatch alarm `EC2-CPU-High-Alert` đã xóa
-- [ ] CloudWatch dashboard `lakehouse-pipeline-health` đã xóa
-- [ ] CloudWatch log groups đã xóa
-- [ ] Security Group `lakehouse-ec2-sg` đã xóa
-- [ ] Internet Gateway `lakehouse-igw` đã xóa
-- [ ] Subnet `lakehouse-public-subnet` đã xóa
-- [ ] VPC `lakehouse-vpc` đã xóa
-- [ ] IAM role `AWSGlueServiceRole-lakehouse` đã xóa
-- [ ] IAM role `lakehouse-ec2-role` đã xóa
-- [ ] SNS topic `lakehouse-alerts` đã xóa
-- [ ] Firehose stream `lakehouse-event-stream` đã xóa (nếu đã tạo)
+-  EC2 instance `lakehouse-dashboard` đã terminate
+-  Elastic IP đã giải phóng
+-  `raw-to-bronze-job` đã xóa
+-  `bronze-to-silver-job` đã xóa
+-  `silver-to-gold-job` đã xóa
+-  7 bảng Glue Catalog đã xóa
+-  Database Glue `customer_behavior_catalog_db` đã xóa
+-  S3 bucket `customer-behavior-lakehouse1` đã làm trống và xóa
+-  CloudWatch alarm `GlueJobFailure-Alert` đã xóa
+-  CloudWatch alarm `Athena-DataScan-Alert` đã xóa
+-  CloudWatch alarm `EC2-CPU-High-Alert` đã xóa
+-  CloudWatch dashboard `lakehouse-pipeline-health` đã xóa
+-  CloudWatch log groups đã xóa
+-  Security Group `lakehouse-ec2-sg` đã xóa
+-  Internet Gateway `lakehouse-igw` đã xóa
+-  Subnet `lakehouse-public-subnet` đã xóa
+-  VPC `lakehouse-vpc` đã xóa
+-  IAM role `AWSGlueServiceRole-lakehouse` đã xóa
+-  IAM role `lakehouse-ec2-role` đã xóa
+-  SNS topic `lakehouse-alerts` đã xóa
+-  Firehose stream `lakehouse-event-stream` đã xóa (nếu đã tạo)
 
 ✅ **Workshop hoàn thành!** Tất cả tài nguyên đã được dọn dẹp. Không có thêm khoản phí nào phát sinh.
 

@@ -158,11 +158,11 @@ No prior experience with Glue, Athena, or Streamlit is required - this workshop 
 
 Before proceeding to Step 1, confirm all items below:
 
-- [ ] AWS account is active with billing enabled
-- [ ] IAM user/role has necessary permissions listed above
-- [ ] AWS CLI v2 installed and configured (`aws sts get-caller-identity` returns your account ID)
-- [ ] Python 3.9+ installed
-- [ ] Sample CSV data files ready (or generated using the script above)
-- [ ] AWS Region set to `us-east-1`
+-  AWS account is active with billing enabled
+-  IAM user/role has necessary permissions listed above
+-  AWS CLI v2 installed and configured (`aws sts get-caller-identity` returns your account ID)
+-  Python 3.9+ installed
+-  Sample CSV data files ready (or generated using the script above)
+-  AWS Region set to `us-east-1`
 
 ✅ **All checked?** Proceed to [Architecture Description](../5.3-Architecture/)
