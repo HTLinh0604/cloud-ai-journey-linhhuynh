@@ -332,9 +332,9 @@ This project is part of the **First Cloud AI Journey (FCAJ)** program.
 
 <div align="center">
 
-**Built with ❤️ for the First Cloud Journey program**
+**Built with ❤️ for the First Cloud AI Journey program**
 
-*Được xây dựng với ❤️ cho chương trình First Cloud Journey*
+*Được xây dựng với ❤️ cho chương trình First Cloud AI Journey*
 
 [![Workshop](https://img.shields.io/badge/Workshop-Documentation-blue?style=for-the-badge)](https://htlinh0604.github.io/cloud-ai-journey-linhhuynh/)
 [![Live Demo](https://img.shields.io/badge/Live-Dashboard-FF4B4B?style=for-the-badge&logo=streamlit)](http://3.217.165.2:8502/)
