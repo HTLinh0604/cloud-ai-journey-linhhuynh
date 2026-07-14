@@ -325,8 +325,8 @@ Pull requests are welcome! For major changes, please open an issue first to disc
 
 ## 📄 License
 
-This project is part of the **First Cloud Journey (FCAJ)** program.
-> *Dự án này là một phần của chương trình **First Cloud Journey (FCAJ)**.*
+This project is part of the **First Cloud AI Journey (FCAJ)** program.
+> *Dự án này là một phần của chương trình **First Cloud AI Journey (FCAJ)**.*
 
 ---
 
