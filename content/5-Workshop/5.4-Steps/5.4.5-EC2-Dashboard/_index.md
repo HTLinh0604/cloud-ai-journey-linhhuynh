@@ -351,4 +351,4 @@ The workshop dashboard has been deployed and is accessible at the link below. Yo
 > 🔗 **[http://3.217.165.2:8502/](http://3.217.165.2:8502/)**
 
 
-✅ **Step 5 complete** — Proceed to [Step 6: Monitoring with CloudWatch](../5.4.6-Monitoring/)
+✅ **Step 5 complete** - Proceed to [Step 6: Monitoring with CloudWatch](../5.4.6-Monitoring/)

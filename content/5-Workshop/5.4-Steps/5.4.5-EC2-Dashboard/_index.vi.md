@@ -350,4 +350,4 @@ Dashboard của workshop đã được deploy và có thể truy cập tại lin
 > 🔗 **[http://3.217.165.2:8502/](http://3.217.165.2:8502/)**
 
 
-✅ **Bước 5 hoàn thành** — Tiến hành đến [Bước 6: Giám sát với CloudWatch](../5.4.6-Monitoring/)
+✅ **Bước 5 hoàn thành** - Tiến hành đến [Bước 6: Giám sát với CloudWatch](../5.4.6-Monitoring/)
