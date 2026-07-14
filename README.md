@@ -193,7 +193,7 @@ The Streamlit dashboard is currently deployed and accessible:
 ### 🔗 [http://3.217.165.2:8502/](http://3.217.165.2:8502/)
 
 *Click to explore the live analytics dashboard*
-*Click để khám phá dashboard phân tích trực tiếp*
+**Click để khám phá dashboard phân tích trực tiếp**
 
 </div>
 
