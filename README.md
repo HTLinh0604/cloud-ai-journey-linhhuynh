@@ -26,7 +26,7 @@
 
 *FinOps-Optimized Serverless Medallion Data Lakehouse Architecture for Customer Behavior Analytics*
 
-*Kiến trúc Data Lakehouse Serverless Medallion tối ưu FinOps cho Phân tích Hành vi Khách hàng*
+**Kiến trúc Data Lakehouse Serverless Medallion tối ưu FinOps cho Phân tích Hành vi Khách hàng**
 
 </div>
 
