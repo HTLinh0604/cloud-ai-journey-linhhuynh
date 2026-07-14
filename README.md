@@ -4,7 +4,6 @@
 <div align="center">
 
 [![AWS](https://img.shields.io/badge/AWS-Cloud-FF9900?style=for-the-badge&logo=amazonaws&logoColor=white)](https://aws.amazon.com/)
-[![Python](https://img.shields.io/badge/Python-3.9+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
 [![Streamlit](https://img.shields.io/badge/Streamlit-Dashboard-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)](https://streamlit.io)
 [![Apache Spark](https://img.shields.io/badge/Apache_Spark-ETL-E25A1C?style=for-the-badge&logo=apachespark&logoColor=white)](https://spark.apache.org/)
 [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
@@ -26,6 +25,7 @@
 ![Architecture Diagram](public/images/Architecture_DE.png) 
 
 *FinOps-Optimized Serverless Medallion Data Lakehouse Architecture for Customer Behavior Analytics*
+
 *Kiến trúc Data Lakehouse Serverless Medallion tối ưu FinOps cho Phân tích Hành vi Khách hàng*
 
 </div>
