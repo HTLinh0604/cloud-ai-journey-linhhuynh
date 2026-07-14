@@ -23,7 +23,7 @@
 
 <div align="center">
 
-![Architecture Diagram](D:/22DKHA1/AWS\FCAJ-workshop\static\images\2-Proposal\Architecture_DE.png) 
+![Architecture Diagram](public/images/Architecture_DE.png) 
 
 *FinOps-Optimized Serverless Medallion Data Lakehouse Architecture for Customer Behavior Analytics*
 *Kiến trúc Data Lakehouse Serverless Medallion tối ưu FinOps cho Phân tích Hành vi Khách hàng*
