@@ -22,7 +22,7 @@ Nền tảng hợp nhất **hai luồng ingestion**: các sự kiện clickstrea
 
 > **Sơ đồ kiến trúc tổng thể:**
 
-![FinOps-Optimized Serverless Medallion Data Lakehouse Architecture](/images/2-Proposal/Architecture_DE.png)
+![FinOps-Optimized Serverless Medallion Data Lakehouse Architecture](/images/2-Proposal/de.png)
 
 **Tổng quan nền tảng:**
 

@@ -22,7 +22,7 @@ The platform unifies **two ingestion paths**: real-time clickstream events from 
 
 > **Overall Architecture Diagram:**
 
-![FinOps-Optimized Serverless Medallion Data Lakehouse Architecture](/images/2-Proposal/Architecture_DE.png)
+![FinOps-Optimized Serverless Medallion Data Lakehouse Architecture](/images/2-Proposal/de.png)
 
 **Platform at a glance:**
 
