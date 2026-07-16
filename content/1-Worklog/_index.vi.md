@@ -6,7 +6,7 @@ chapter: false
 pre: " <b> 1. </b> "
 ---
 
-Đây là nhật ký công việc của mình trong suốt chương trình thực tập **First Cloud AI Journey (FCAJ)** — chương trình thực tập tập trung vào Cloud và AI trên nền tảng AWS. Mỗi nhật ký tuần ghi lại mục tiêu, các công việc triển khai từ Thứ Hai đến Thứ Sáu, và kết quả đạt được.
+Đây là nhật ký công việc của mình trong suốt chương trình thực tập **First Cloud AI Journey (FCAJ)** - chương trình thực tập tập trung vào Cloud và AI trên nền tảng AWS. Mỗi nhật ký tuần ghi lại mục tiêu, các công việc triển khai từ Thứ Hai đến Thứ Sáu, và kết quả đạt được.
 
 Chương trình kéo dài **12 tuần** (20/04 - 12/07/2026), bao gồm các nội dung từ cơ bản đến nâng cao về điện toán đám mây, data engineering, analytics, bảo mật và kiến trúc hệ thống trên AWS.
 

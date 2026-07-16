@@ -6,7 +6,7 @@ chapter: false
 pre: " <b> 1. </b> "
 ---
 
-This is my worklog throughout the **First Cloud AI Journey (FCAJ)** internship program — an internship focused on Cloud and AI on the AWS platform. Each weekly entry documents learning objectives, services explored, hands-on tasks completed, and key takeaways.
+This is my worklog throughout the **First Cloud AI Journey (FCAJ)** internship program - an internship focused on Cloud and AI on the AWS platform. Each weekly entry documents learning objectives, services explored, hands-on tasks completed, and key takeaways.
 
 The program spans **12 weeks** (April 20 - July 12, 2026), covering topics from foundational to advanced levels in cloud computing, data engineering, analytics, security, and system architecture on AWS.
 
