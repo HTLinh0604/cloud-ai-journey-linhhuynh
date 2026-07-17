@@ -8,7 +8,7 @@
 [![Apache Spark](https://img.shields.io/badge/Apache_Spark-ETL-E25A1C?style=for-the-badge&logo=apachespark&logoColor=white)](https://spark.apache.org/)
 [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
 
-**[🌐 Live Dashboard](http://3.217.165.2:8502/) · [📖 Workshop Docs](https://htlinh0604.github.io/cloud-ai-journey-linhhuynh/) 
+[🌐 Live Dashboard](http://3.217.165.2:8502/) · [📖 Workshop Docs](https://htlinh0604.github.io/cloud-ai-journey-linhhuynh/) 
 
 </div>
 
