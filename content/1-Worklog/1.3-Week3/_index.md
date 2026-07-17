@@ -6,25 +6,37 @@ chapter: false
 pre: " <b> 1.3. </b> "
 ---
 
-Weekly objectives:
-- Learn AWS CLI for resource management and query filtering.
-- Study NoSQL database concepts and Amazon DynamoDB.
-- Understand Amazon CloudFront and Lambda@Edge for edge processing.
-- Deploy databases and web applications in a custom VPC.
-- Get hands-on with serverless compute and Infrastructure as Code.
+**Weekly objectives:**
+- Install, configure, and use the AWS CLI to manage resources with advanced query filters.
+- Understand Amazon DynamoDB and NoSQL database modeling concepts.
+- Deploy global caching using CloudFront and configure Lambda@Edge.
+- Build custom network infrastructure with public subnets and deploy an EC2 web server.
+- Develop serverless apps with AWS Lambda and deploy infrastructure using AWS CDK.
 
-Tasks to be deployed this week:
+**Tasks to be deployed this week:**
 
 | Day | Task | Date |
 |---|---|---|
-| Monday | Practice AWS CLI commands, DynamoDB table settings, CloudFront edge configurations, and deploy an EC2 web server in a custom VPC. (Office visit) | May 4 |
-| Tuesday | Study serverless compute with AWS Lambda and define Infrastructure as Code using AWS CDK in VS Code. (Office visit) | May 5 |
-| Wednesday | Deep dive into AWS CloudFormation templates and deploy RDS PostgreSQL inside a custom VPC. (Office visit) | May 6 |
-| Thursday | Review AWS CLI commands and practice S3 file management via command-line interface. | May 7 |
-| Friday | Study AWS CDK L2 construct patterns and review CloudFormation Change Sets. | May 8 |
+| Monday (Office visit) | Installed the AWS CLI and configured credential profiles. Practiced complex resource queries using JMESPath filters. Created a custom VPC, subnet, route table, Internet Gateway, and launched an EC2 instance running Apache web server using user data. | May 4 |
+| Tuesday (Office visit) | Deployed a DynamoDB table and studied partition and sort key design. Configured Amazon CloudFront distribution to cache static assets and researched Lambda@Edge request manipulation. | May 5 |
+| Wednesday (Office visit) | Created serverless Python Lambda functions, configuring memory limits and execution timeouts. Initialized an AWS CDK application in TypeScript, defining standard S3 constructs. | May 6 |
+| Thursday | Practiced AWS CLI commands to synchronize local directories with S3 buckets. Used configuration flags to filter files and set storage classes during upload. | May 7 |
+| Friday | Configured S3 lifecycle policies and verified transition rules. Explored AWS Toolkit for VS Code to browse Lambda functions and execute test queries locally. | May 8 |
 
-Weekly results achieved:
-- Gained proficiency in using AWS CLI to inspect and filter AWS resources.
-- Deployed custom VPC networks with public and private subnets, EC2 instances, and RDS databases.
-- Created and deployed serverless applications using AWS Lambda.
-- Implemented infrastructure using AWS CDK and CloudFormation templates.
+**Weekly results achieved:**
+- **Monday (Office visit):**
+  - Result Achieved: Configured AWS CLI profiles, queried active instances, and verified the Apache web page was accessible publicly.
+  - Lesson: Automation via CLI is faster than console configuration. VPC design forms the basic network isolation layer for cloud resources.
+- **Tuesday (Office visit):**
+  - Result Achieved: Active DynamoDB table with composite primary key, and CloudFront distribution caching objects.
+  - Lesson: DynamoDB scales horizontally through key distribution. CloudFront caching reduces load on origins and decreases latency.
+- **Wednesday (Office visit):**
+  - Result Achieved: Active Lambda function and synthesized CDK template generating CloudFormation outputs.
+  - Lesson: Lambda provides serverless scalability. CDK allows defining infrastructure using standard programming languages.
+- **Thursday:**
+  - Result Achieved: Wrote a script to sync local files to S3, verify checksums, and list bucket contents via CLI.
+  - Lesson: Scripting S3 data management via CLI is essential for automated backup pipelines and data ingestion processes.
+- **Friday:**
+  - Result Achieved: Applied lifecycle transition policies and successfully ran local Lambda function tests using the IDE toolkit.
+  - Lesson: IDE tools improve developer productivity by allowing local debugging of serverless functions before deployment.
+

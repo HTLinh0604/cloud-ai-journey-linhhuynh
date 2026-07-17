@@ -6,25 +6,36 @@ chapter: false
 pre: " <b> 1.9. </b> "
 ---
 
-Weekly objectives:
-- Finalize pipeline architecture layers and data integrations.
-- Research streaming technologies and change data capture architectures.
-- Conduct a detailed cost and budget estimation for the pipeline.
-- Implement scalability, fault tolerance, and security patterns in the design.
-- Prepare technical documentation and validation collections.
+**Weekly objectives:**
+- Finalize the end-to-end architecture blueprint and detail all component integrations.
+- Analyze and calculate the estimated monthly cost for all resources using the AWS Pricing Calculator.
+- Define scalability, fault tolerance, and security specifications for the pipeline components.
+- Document service trade-offs and prepare technical flowcharts for the workshop.
 
-Tasks to be deployed this week:
+**Tasks to be deployed this week:**
 
 | Day | Task | Date |
 |---|---|---|
-| Monday | Lock down final end-to-end architecture components and logical data flows. | Jun 15 |
-| Tuesday | Research streaming systems like Kafka and Kinesis, schema registries, and CDC. | Jun 16 |
-| Wednesday | Perform service-by-service cost calculations and establish FinOps guardrails. | Jun 17 |
-| Thursday | Integrate job bookmarks, dead-letter queues, and IAM permission matrices. | Jun 18 |
-| Friday | Evaluate and document service trade-offs and draft the workshop guides. | Jun 19 |
+| Monday | Confirmed the layers of the Medallion architecture, mapping data states from CSV logs to aggregated Gold Parquet tables. Defined S3 bucket structures for each data quality tier. | Jun 15 |
+| Tuesday | Researched streaming ingestion options, comparing Kinesis Data Firehose with Apache Kafka. Studied Change Data Capture patterns for syncing databases with data lakes. | Jun 16 |
+| Wednesday | Used the AWS Pricing Calculator to estimate monthly running costs for S3 storage, Glue ETL runs, Athena queries, and EC2 instances. Formulated cost optimization tactics. | Jun 17 |
+| Thursday | Formulated security requirements including IAM roles with least privilege policies. Defined S3 server-side encryption settings and built-in retry options for Glue jobs. | Jun 18 |
+| Friday | Completed technical flowcharts representing data transitions. Documented service trade-offs, choosing Firehose, Glue, and Athena to minimize costs and deployment complexity. | Jun 19 |
 
-Weekly results achieved:
-- Completed the final technical design blueprint for the project pipeline.
-- Achieved a budget-optimized cost estimate of less than one dollar per month.
-- Implemented fault-tolerance designs including automatic retry and state monitoring.
-- Prepared bilingual technical guides and SQL query sets for the implementation phase.
+**Weekly results achieved:**
+- **Monday:**
+  - Result Achieved: Confirmed S3 folder hierarchies and mapped data schema transitions from Raw to Gold.
+  - Lesson: Designing strict directory and schema structures prevents metadata chaos and query errors in the data catalog.
+- **Tuesday:**
+  - Result Achieved: Formulated evaluation report on Kinesis vs Kafka for streaming ingestion.
+  - Lesson: Kinesis Firehose is fully managed and integrates natively with S3, reducing operational overhead compared to Kafka.
+- **Wednesday:**
+  - Result Achieved: Completed a cost estimation report showing monthly cost allocations and savings from Parquet formats.
+  - Lesson: Columnar formats like Parquet significantly reduce query scanning, lowering Athena query costs by up to 85%.
+- **Thursday:**
+  - Result Achieved: Completed security permission matrices and active-backup configuration parameters for the pipeline.
+  - Lesson: Securing bucket access via IAM roles instead of hardcoded credentials prevents credentials leaks.
+- **Friday:**
+  - Result Achieved: Completed technical documentation and deployment checklists ready for workshop implementation.
+  - Lesson: Documenting trade-offs provides reference context for future architecture modifications and expansions.
+
