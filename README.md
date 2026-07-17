@@ -97,6 +97,10 @@ FCAJ-workshop/
 │   └── athena_queries.sql            # Business query collection
 │
 ├── 📁 content/                       # Hugo workshop documentation
+│   ├── 1-Worklop/
+│   ├── 2-Proposal/
+│   ├── 3-BlogsTranslated/
+│   ├── 4-EventParticipated/
 │   ├── 5-Workshop/
 │   │   ├── 5.1-Overview/             # Workshop overview
 │   │   ├── 5.2-Prerequisite/         # Prerequisites & setup guide
@@ -109,6 +113,7 @@ FCAJ-workshop/
 │   │   │   ├── 5.4.5-EC2-Dashboard/  # Step 5: EC2 & Streamlit Dashboard
 │   │   │   └── 5.4.6-Monitoring/     # Step 6: CloudWatch Monitoring
 │   │   └── 5.5-Cleanup/              # Resource cleanup guide
+│   │   └── 5.6-Video Demo/           # Video demo ưorkshop
 │   ├── 6-Self-evaluation/            # Team self-assessment
 │   └── 7-Feedback/                   # Program feedback & sharing
 │
