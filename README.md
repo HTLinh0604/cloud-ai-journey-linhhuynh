@@ -22,7 +22,7 @@
 
 <div align="center">
 
-![Architecture Diagram](static/images/2-Proposal/Architecture_DE.png)  
+![Architecture Diagram](static/images/2-Proposal/de.png)  
 
 *FinOps-Optimized Serverless Medallion Data Lakehouse Architecture for Customer Behavior Analytics*
 
