@@ -8,7 +8,7 @@
 [![Apache Spark](https://img.shields.io/badge/Apache_Spark-ETL-E25A1C?style=for-the-badge&logo=apachespark&logoColor=white)](https://spark.apache.org/)
 [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
 
-**[🌐 Live Dashboard](http://3.217.165.2:8502/) · [📖 Workshop Docs](https://htlinh0604.github.io/cloud-ai-journey-linhhuynh/) 
+[🌐 Live Dashboard](http://3.217.165.2:8502/) · [📖 Workshop Docs](https://htlinh0604.github.io/cloud-ai-journey-linhhuynh/) 
 
 </div>
 
@@ -22,7 +22,7 @@
 
 <div align="center">
 
-![Architecture Diagram](static/images/2-Proposal/Architecture_DE.png)  
+![Architecture Diagram](static/images/2-Proposal/de.png)  
 
 *FinOps-Optimized Serverless Medallion Data Lakehouse Architecture for Customer Behavior Analytics*
 
@@ -97,6 +97,10 @@ FCAJ-workshop/
 │   └── athena_queries.sql            # Business query collection
 │
 ├── 📁 content/                       # Hugo workshop documentation
+│   ├── 1-Worklop/
+│   ├── 2-Proposal/
+│   ├── 3-BlogsTranslated/
+│   ├── 4-EventParticipated/
 │   ├── 5-Workshop/
 │   │   ├── 5.1-Overview/             # Workshop overview
 │   │   ├── 5.2-Prerequisite/         # Prerequisites & setup guide
@@ -109,6 +113,7 @@ FCAJ-workshop/
 │   │   │   ├── 5.4.5-EC2-Dashboard/  # Step 5: EC2 & Streamlit Dashboard
 │   │   │   └── 5.4.6-Monitoring/     # Step 6: CloudWatch Monitoring
 │   │   └── 5.5-Cleanup/              # Resource cleanup guide
+│   │   └── 5.6-Video Demo/           # Video demo ưorkshop
 │   ├── 6-Self-evaluation/            # Team self-assessment
 │   └── 7-Feedback/                   # Program feedback & sharing
 │
