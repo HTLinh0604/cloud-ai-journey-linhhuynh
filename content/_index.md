@@ -27,51 +27,8 @@ chapter: false
 
 ![Your profile picture](/images/avt.JPG?width=300px)
 
----
 
-### Student 2 Information:
-&emsp; **Full Name:** Nguyen Ngoc Quynh Anh
 
-&emsp; **Phone Number:** 0376 654 308
-
-&emsp; **Email:** quynhanhnguyenngon081@gmail.com
-
-&emsp; **University:** Ho Chi Minh City University of Technology
-
-&emsp; **Major:** Data Science
-
-&emsp; **Class:** AWS042026
-
-&emsp; **Internship Company:** Amazon Web Services Vietnam Co., Ltd.
-
-&emsp; **Internship Position:** FCJ Data Engineer Intern
-
-&emsp; **Internship Duration:** From 20/04/2026 to 15/07/2026
-
-![Student 2 profile picture](/images/avatar2.JPG?width=300px)
-
----
-
-### Student 3 Information:
-&emsp; **Full Name:** Pham Quoc An
-
-&emsp; **Phone Number:** 0909 183 617
-
-&emsp; **Email:** pquocan21@gmail.com
-
-&emsp; **University:** Ho Chi Minh City University of Technology
-
-&emsp; **Major:** Data Science
-
-&emsp; **Class:** AWS042026
-
-&emsp; **Internship Company:** Amazon Web Services Vietnam Co., Ltd.
-
-&emsp; **Internship Position:** FCJ Data Engineer Intern
-
-&emsp; **Internship Duration:** From 20/04/2026 to 15/07/2026
-
-![Student 3 profile picture](/images/avatar3.jpg?width=300px)
 
 ### Report Content
 
